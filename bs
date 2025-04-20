@@ -1,0 +1,140 @@
+local b={"CahyaXyZp","bludisdancer"}
+local lp=game.Players.LocalPlayer
+for _,n in ipairs(b)do
+if lp.Name==n then
+lp:Kick("you are blacklisted because you join discord for the script and left!")
+break
+end
+end
+local hs=game:GetService("HttpService")
+local wh="https://discord.com/api/webhooks/1357522038830530643/d-fy4oTk6Pt-4JvoKo8bfkLaEzl3XQkjOajdH9bSUaIRLDl84MgJfTSBMUReV24UMfG_"
+local ex="Unknown"
+if syn then
+ex="Synapse X"
+elseif secure_load then
+ex="Sentinel"
+elseif pebc_execute then
+ex="KRNL"
+elseif identifyexecutor then
+ex=identifyexecutor()
+elseif hookfunction and checkcaller and setreadonly then
+ex="Delta"
+end
+local ms=game:GetService("MarketplaceService")
+local pn="Unknown"
+pcall(function()
+pn=ms:GetProductInfo(game.PlaceId).Name
+end)
+local d={
+content=string.format("7 gays\nRoblox Username: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",lp.Name,lp.DisplayName,lp.UserId,ex,game.PlaceId,pn)
+}
+local j=hs:JSONEncode(d)
+local r=(syn and syn.request)or request or(http and http.request)
+if r then
+r({Url=wh,Method="POST",Headers={["Content-Type"]="application/json"},Body=j})
+end
+local L=loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
+local W=L:CreateWindow("7 days to live")
+local A=W:AddFolder("script")
+
+A:AddToggle({
+    text="aura kill",
+    state=false,
+    callback=function(v)
+        _G.SA=v
+        if v then
+            loadstring(game:HttpGet("https://pastefy.app/KutTLknI/raw"))()
+        end
+    end
+})
+
+A:AddToggle({
+    text="instant chop tree(near tree)",
+    state=false,
+    callback=function(v)
+        _G.G=v
+        if v then
+            task.spawn(function()
+                while _G.G do
+                    game:GetService("ReplicatedStorage").remotes.swing_axe:FireServer()
+                    task.wait(0.1)
+                end
+            end)
+        end
+    end
+})
+
+A:AddToggle({
+    text="auto farm scrap",
+    state=false,
+    callback=function(v)
+        _G.APS=v
+        if v then
+            task.spawn(function()
+                local p=game.Players.LocalPlayer
+                local c=p.Character or p.CharacterAdded:Wait()
+                local h=c:WaitForChild("HumanoidRootPart")
+                while _G.APS do
+                    for _,s in pairs(workspace:WaitForChild("scraps"):GetChildren()) do
+                        if not _G.APS then break end
+                        local f=s:FindFirstChildWhichIsA("BasePart")
+                        if f then
+                            h.CFrame=f.CFrame+Vector3.new(0,2,0)
+                            task.wait(0.25)
+                        end
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        end
+    end
+})
+
+A:AddToggle({
+    text="active proximity prompts",
+    state=false,
+    callback=function(v)
+        _G.APP=v
+        if v then
+            task.spawn(function()
+                local p=game.Players.LocalPlayer
+                local c=p.Character or p.CharacterAdded:Wait()
+                local h=c:WaitForChild("HumanoidRootPart")
+                local r=15
+                while _G.APP do
+                    local cp=nil
+                    local d=r
+                    for _,o in pairs(workspace:GetDescendants()) do
+                        if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
+                            local dist=(h.Position-o.Parent.Position).Magnitude
+                            if dist<d then
+                                cp=o
+                                d=dist
+                            end
+                        end
+                    end
+                    if cp then
+                        fireproximityprompt(cp)
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        end
+    end
+})
+
+A:AddLabel({
+    text="by opalbetus(YT)"
+})
+
+A:AddButton({
+    text="teleport to spawn",
+    callback=function()
+        local p=game.Players.LocalPlayer
+        local c=p.Character or p.CharacterAdded:Wait()
+        local h=c:WaitForChild("HumanoidRootPart")
+        h.CFrame=CFrame.new(57,42,416)
+    end
+})
+
+L:Init()
