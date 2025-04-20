@@ -148,11 +148,6 @@ A:AddToggle({
     end
 })
 
--- Credit Label
-A:AddLabel({
-    text = "by opalbetus(YT)"
-})
-
 -- Teleport to Spawn
 A:AddButton({
     text = "teleport to spawn",
@@ -162,6 +157,10 @@ A:AddButton({
         local h = c:WaitForChild("HumanoidRootPart")
         h.CFrame = CFrame.new(57, 42, 416)
     end
+})
+
+A:AddLabel({
+    text = "by opalbetus(YT)"
 })
 
 -- Init UI
