@@ -164,7 +164,7 @@ A:AddButton({
 })
 
 A:AddLabel({
-    text = "dibikin sama bapak nadit"
+    text = "Made by Pall(@opalbetus)"
 })
 
 L:Init()
