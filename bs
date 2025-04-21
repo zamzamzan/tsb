@@ -38,11 +38,9 @@ if r then
     r({Url = wh, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = j})
 end
 
--- Load UI Library
 local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
 local W = L:CreateWindow("7 days to live")
 local A = W:AddFolder("script")
-
 
 A:AddToggle({
     text = "aura kill",
@@ -65,7 +63,7 @@ A:AddToggle({
         end
     end
 })
--- Instant Chop Tree
+
 A:AddToggle({
     text = "instant chop tree(near tree)",
     state = false,
@@ -82,7 +80,6 @@ A:AddToggle({
     end
 })
 
--- Auto Farm Scrap (with ProximityPrompt activation)
 A:AddToggle({
     text = "auto farm scrap",
     state = false,
@@ -100,7 +97,6 @@ A:AddToggle({
                         if f then
                             h.CFrame = f.CFrame + Vector3.new(0, 2, 0)
                             task.wait(0.1)
-                            -- Use same method as "active proximity prompts"
                             local cp = nil
                             local closestDist = 15
                             for _, o in pairs(workspace:GetDescendants()) do
@@ -124,7 +120,6 @@ A:AddToggle({
     end
 })
 
--- Active Proximity Prompts
 A:AddToggle({
     text = "active proximity prompts",
     state = false,
@@ -158,7 +153,6 @@ A:AddToggle({
     end
 })
 
--- Teleport to Spawn
 A:AddButton({
     text = "teleport to spawn",
     callback = function()
@@ -173,5 +167,4 @@ A:AddLabel({
     text = "by opalbetus(YT)"
 })
 
--- Init UI
 L:Init()
