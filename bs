@@ -73,7 +73,7 @@ A:AddToggle({
             task.spawn(function()
                 while _G.G do
                     game:GetService("ReplicatedStorage").remotes.swing_axe:FireServer()
-                    task.wait(0.01
+                    task.wait(0.01)
                 end
             end)
         end
