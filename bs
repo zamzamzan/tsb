@@ -43,18 +43,28 @@ local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScri
 local W = L:CreateWindow("7 days to live")
 local A = W:AddFolder("script")
 
--- Aura Kill
+
 A:AddToggle({
     text = "aura kill",
     state = false,
     callback = function(v)
-        _G.SA = v
+        _G.ShootAura = v
         if v then
-            loadstring(game:HttpGet("https://pastefy.app/KutTLknI/raw"))()
+            local range = 50
+            task.spawn(function()
+                while _G.ShootAura do
+                    for _, scp in ipairs(workspace.scps:GetChildren()) do
+                        local head = scp:FindFirstChild("Head")
+                        if head and (head.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < range then
+                            game.ReplicatedStorage.remotes.shoot:FireServer(head.CFrame)
+                        end
+                    end
+                    task.wait(0.2)
+                end
+            end)
         end
     end
 })
-
 -- Instant Chop Tree
 A:AddToggle({
     text = "instant chop tree(near tree)",
