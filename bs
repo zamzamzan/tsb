@@ -164,7 +164,7 @@ A:AddButton({
 })
 
 A:AddLabel({
-    text = "by opalbetus(YT)"
+    text = "dibikin sama bapak nadit"
 })
 
 L:Init()
