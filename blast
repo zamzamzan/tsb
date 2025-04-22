@@ -1,2 +1,117 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/zamzamzan/tsb/refs/heads/main/sigma"))()
-local lib=loadstring(game:HttpGet("https://raw.githubusercontent.com/jensonhirst/Orion/main/source"))()local win=lib:MakeWindow({Name="Teleport to Chest v1.1",HidePremium=true,IntroEnabled=true,IntroText="3-2-1 Blast off simulator",IntroIcon="rbxassetid://7733946818",ToggleIcon="rbxassetid://7733946818"})local tab1=win:MakeTab({Name="Island Teleports",Icon="rbxassetid://7733946818"})local tab2=win:MakeTab({Name="Dimension Teleports",Icon="rbxassetid://7733946818"})lib:MakeNotification({Name="Made by Opalbetus",Content="Made by Opalbetus",Image="rbxassetid://4483345998",Time=3})local function getTarget(path)local islands=workspace:FindFirstChild("Islands")if not islands then return nil end local tgt=islands for _,seg in ipairs(path)do tgt=tgt:FindFirstChild(seg)if not tgt then return nil end end return tgt end local function tp(tgt)local char=plr.Character or plr.CharacterAdded:Wait()local hrp=char:WaitForChild("HumanoidRootPart")if tgt then hrp.CFrame=tgt.CFrame end end local locs={["Dimension 1"]={["1"]={"CloudIsland","Obby","PrizeChest","Chest"},["2"]={"FloatingIsland","Obby","Prize","PrizeChest","Chest"},["3"]={"BeeIsland","Prize","PrizeChest","Chest"},["4"]={"SatelliteIsland","Prize","PrizeChest","Chest"},["5"]={"MoonIsland","Prize","PrizeChest","Chest"},["6"]={"SpaceRocksIsland","Prize","PrizeChest","Chest"},["7"]={"DarkMatterIsland","Prize","PrizeChest","Chest"},["8"]={"FallingStar","Prize","PrizeChest","Chest"},["9"]={"Vanish","Prize","PrizeChest","Chest"},["10"]={"MarsStationZero","Station","Prize","PrizeChest","Chest"}},["Dimension 2"]={["1"]={"UFORepair","PrizeChest","Chest"},["2"]={"MoonlingObby","PrizeChest","Chest"},["3"]={"FireFly","PrizeChest","Chest"},["4"]={"SpaceGun","PrizeChest","Chest"},["5"]={"MazeOfReflection","PrizeChest","Chest"}},["Dimension 3"]={["1"]={"RapscallionsMaze","PrizeChest","Chest"},["2"]={"HelpOrHinder","Obby","Part4","Prize","PrizeChest","Chest"},["3"]={"CopyCat","PrizeChest","Chest"},["4"]={"Singularity","PrizeChest","Chest"},["5"]={"TheGrobs","PrizeChest","Chest"},["6"]={"CodeBreaker","PrizeChest","Chest"}}}for d,l in pairs(locs)do local opts={}for i in pairs(l)do table.insert(opts,i)end tab1:AddDropdown({Name=d,Default="",Options=opts,Callback=function(val)tp(getTarget(l[val]))end})end tab1:AddButton({Name="Rank up (use in dimension 1)",Callback=function()local c=plr.Character or plr.CharacterAdded:Wait()local r=c:FindFirstChild("HumanoidRootPart")if r then r.CFrame=CFrame.new(6,33966,-16)end end})local function tpGame(id)local ts=game:GetService("TeleportService")pcall(function()ts:Teleport(id)end)end tab2:AddButton({Name="Teleport to Dimension 1",Callback=function()tpGame(5256165620)end})tab2:AddButton({Name="Teleport to Dimension 2",Callback=function()tpGame(8015075184)end})tab2:AddButton({Name="Teleport to Dimension 3",Callback=function()tpGame(15836716217)end})tab1:AddParagraph("Made by Opalbetus","")tab1:AddParagraph("Sorry if there is a missing island","")tab2:AddButton({Name="destroy library",Callback=function()lib:Destroy()end})lib:Init()
+
+local plr = game.Players.LocalPlayer
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jensonhirst/Orion/main/source"))()
+
+local win = lib:MakeWindow({
+	Name = "Teleport to Chest v1.1",
+	HidePremium = true,
+	IntroEnabled = true,
+	IntroText = "3-2-1 Blast off simulator",
+	IntroIcon = "rbxassetid://7733946818",
+	ToggleIcon = "rbxassetid://7733946818"
+})
+
+local tab1 = win:MakeTab({Name = "Island Teleports", Icon = "rbxassetid://7733946818"})
+local tab2 = win:MakeTab({Name = "Dimension Teleports", Icon = "rbxassetid://7733946818"})
+
+lib:MakeNotification({
+	Name = "Made by Opalbetus",
+	Content = "Made by Opalbetus",
+	Image = "rbxassetid://4483345998",
+	Time = 3
+})
+
+local function getTarget(path)
+	local islands = workspace:FindFirstChild("Islands")
+	if not islands then return nil end
+	local tgt = islands
+	for _, seg in ipairs(path) do
+		tgt = tgt:FindFirstChild(seg)
+		if not tgt then return nil end
+	end
+	return tgt
+end
+
+local function tp(tgt)
+	local char = plr.Character or plr.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	if tgt then hrp.CFrame = tgt.CFrame end
+end
+
+local locs = {
+	["Dimension 1"] = {
+		["1"] = {"CloudIsland", "Obby", "PrizeChest", "Chest"},
+		["2"] = {"FloatingIsland", "Obby", "Prize", "PrizeChest", "Chest"},
+		["3"] = {"BeeIsland", "Prize", "PrizeChest", "Chest"},
+		["4"] = {"SatelliteIsland", "Prize", "PrizeChest", "Chest"},
+		["5"] = {"MoonIsland", "Prize", "PrizeChest", "Chest"},
+		["6"] = {"SpaceRocksIsland", "Prize", "PrizeChest", "Chest"},
+		["7"] = {"DarkMatterIsland", "Prize", "PrizeChest", "Chest"},
+		["8"] = {"FallingStar", "Prize", "PrizeChest", "Chest"},
+		["9"] = {"Vanish", "Prize", "PrizeChest", "Chest"},
+		["10"] = {"MarsStationZero", "Station", "Prize", "PrizeChest", "Chest"}
+	},
+	["Dimension 2"] = {
+		["1"] = {"UFORepair", "PrizeChest", "Chest"},
+		["2"] = {"MoonlingObby", "PrizeChest", "Chest"},
+		["3"] = {"FireFly", "PrizeChest", "Chest"},
+		["4"] = {"SpaceGun", "PrizeChest", "Chest"},
+		["5"] = {"MazeOfReflection", "PrizeChest", "Chest"}
+	},
+	["Dimension 3"] = {
+		["1"] = {"RapscallionsMaze", "PrizeChest", "Chest"},
+		["2"] = {"HelpOrHinder", "Obby", "Part4", "Prize", "PrizeChest", "Chest"},
+		["3"] = {"CopyCat", "PrizeChest", "Chest"},
+		["4"] = {"Singularity", "PrizeChest", "Chest"},
+		["5"] = {"TheGrobs", "PrizeChest", "Chest"},
+		["6"] = {"CodeBreaker", "PrizeChest", "Chest"}
+	}
+}
+
+for d, l in pairs(locs) do
+	local opts = {}
+	for i in pairs(l) do
+		table.insert(opts, i)
+	end
+	tab1:AddDropdown({
+		Name = d,
+		Default = "",
+		Options = opts,
+		Callback = function(val)
+			tp(getTarget(l[val]))
+		end
+	})
+end
+
+tab1:AddButton({
+	Name = "Rank up (use in dimension 1)",
+	Callback = function()
+		local c = plr.Character or plr.CharacterAdded:Wait()
+		local r = c:FindFirstChild("HumanoidRootPart")
+		if r then r.CFrame = CFrame.new(6, 33966, -16) end
+	end
+})
+
+local function tpGame(id)
+	local ts = game:GetService("TeleportService")
+	pcall(function()
+		ts:Teleport(id)
+	end)
+end
+
+tab2:AddButton({Name = "Teleport to Dimension 1", Callback = function() tpGame(5256165620) end})
+tab2:AddButton({Name = "Teleport to Dimension 2", Callback = function() tpGame(8015075184) end})
+tab2:AddButton({Name = "Teleport to Dimension 3", Callback = function() tpGame(15836716217) end})
+
+tab1:AddParagraph("Made by Opalbetus", "")
+tab1:AddParagraph("Sorry if there is a missing island", "")
+
+tab2:AddButton({
+	Name = "destroy library",
+	Callback = function()
+		lib:Destroy()
+	end
+})
+
+lib:Init()
