@@ -8,7 +8,6 @@ for _, n in ipairs(b) do
 end
 
 local HttpService = game:GetService("HttpService")
-local lp = game.Players.LocalPlayer
 
 local executor = "Unknown"
 if syn then
@@ -34,7 +33,6 @@ local data = {
 }
 
 local json = HttpService:JSONEncode(data)
-
 local req = (syn and syn.request) or request or (http and http.request)
 if req then
     req({
@@ -59,9 +57,9 @@ A:AddToggle({
             task.spawn(function()
                 while _G.ShootAura do
                     for _, scp in ipairs(workspace.scps:GetChildren()) do
-                        local hrp = scp:FindFirstChild("HumanoidRootPart")
-                        if hrp and (hrp.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < range then
-                            game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame)
+                        local root = scp:FindFirstChild("HumanoidRootPart")
+                        if root and (root.Position - lp.Character.HumanoidRootPart.Position).Magnitude < range then
+                            game.ReplicatedStorage.remotes.shoot:FireServer(root.CFrame)
                         end
                     end
                     task.wait(0.2)
@@ -94,7 +92,7 @@ A:AddToggle({
         _G.APS = v
         if v then
             task.spawn(function()
-                local p = game.Players.LocalPlayer
+                local p = lp
                 local c = p.Character or p.CharacterAdded:Wait()
                 local h = c:WaitForChild("HumanoidRootPart")
                 while _G.APS do
@@ -128,32 +126,58 @@ A:AddToggle({
 })
 
 A:AddToggle({
-    text = "active proximity prompts (aura)",
+    text = "active proximity prompts",
     state = false,
     callback = function(v)
         _G.APP = v
         if v then
             task.spawn(function()
-                local p = game.Players.LocalPlayer
-                local c = p.Character or p.CharacterAdded:Wait()
+                local c = lp.Character or lp.CharacterAdded:Wait()
                 local h = c:WaitForChild("HumanoidRootPart")
-                local r = 15 -- aura range
+                local r = 15
                 while _G.APP do
-                    local nearestPrompt = nil
-                    local shortestDist = r
-                    for _, o in ipairs(workspace:GetDescendants()) do
+                    local cp = nil
+                    local d = r
+                    for _, o in pairs(workspace:GetDescendants()) do
                         if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
                             local dist = (h.Position - o.Parent.Position).Magnitude
-                            if dist <= shortestDist then
-                                nearestPrompt = o
-                                shortestDist = dist
+                            if dist < d then
+                                cp = o
+                                d = dist
                             end
                         end
                     end
-                    if nearestPrompt then
-                        fireproximityprompt(nearestPrompt)
+                    if cp then
+                        fireproximityprompt(cp)
                     end
-                    task.wait(0.3) -- slight delay for performance
+                    task.wait()
+                end
+            end)
+        end
+    end
+})
+
+A:AddToggle({
+    text = "fast active proximity prompts (no delay)",
+    state = false,
+    callback = function(v)
+        _G.FastAPP = v
+        if v then
+            task.spawn(function()
+                local c = lp.Character or lp.CharacterAdded:Wait()
+                local h = c:WaitForChild("HumanoidRootPart")
+                local r = 15
+                while _G.FastAPP do
+                    for _, o in pairs(workspace:GetDescendants()) do
+                        if not _G.FastAPP then break end
+                        if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
+                            local dist = (h.Position - o.Parent.Position).Magnitude
+                            if dist <= r then
+                                fireproximityprompt(o)
+                            end
+                        end
+                    end
+                    -- No delay
                 end
             end)
         end
@@ -163,10 +187,8 @@ A:AddToggle({
 A:AddButton({
     text = "teleport to spawn",
     callback = function()
-        local p = game.Players.LocalPlayer
-        local c = p.Character or p.CharacterAdded:Wait()
-        local h = c:WaitForChild("HumanoidRootPart")
-        h.CFrame = CFrame.new(57, 42, 416)
+        local c = lp.Character or lp.CharacterAdded:Wait()
+        c:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(57, 42, 416)
     end
 })
 
@@ -174,7 +196,9 @@ A:AddButton({
     text = "instant max hunger(hold any food)",
     callback = function()
         for i = 1, 20 do
-            game:GetService("Players").LocalPlayer.Character.Cabbage.eat:FireServer()
+            pcall(function()
+                lp.Character.Cabbage.eat:FireServer()
+            end)
         end
     end
 })
