@@ -29,7 +29,7 @@ pcall(function()
 end)
 
 local data = {
-    content = string.format("7 gays\nUsername: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",
+    content = string.format("blast\nUsername: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",
         lp.Name, lp.DisplayName, lp.UserId, executor, game.PlaceId, gameName)
 }
 
