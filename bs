@@ -59,9 +59,9 @@ A:AddToggle({
             task.spawn(function()
                 while _G.ShootAura do
                     for _, scp in ipairs(workspace.scps:GetChildren()) do
-                        local head = scp:FindFirstChild("Head")
-                        if head and (head.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < range then
-                            game.ReplicatedStorage.remotes.shoot:FireServer(head.CFrame)
+                        local hrp = scp:FindFirstChild("HumanoidRootPart")
+                        if hrp and (hrp.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < range then
+                            game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame)
                         end
                     end
                     task.wait(0.2)
@@ -128,7 +128,7 @@ A:AddToggle({
 })
 
 A:AddToggle({
-    text = "active proximity prompts",
+    text = "active proximity prompts (aura)",
     state = false,
     callback = function(v)
         _G.APP = v
@@ -137,23 +137,23 @@ A:AddToggle({
                 local p = game.Players.LocalPlayer
                 local c = p.Character or p.CharacterAdded:Wait()
                 local h = c:WaitForChild("HumanoidRootPart")
-                local r = 15
+                local r = 15 -- aura range
                 while _G.APP do
-                    local cp = nil
-                    local d = r
-                    for _, o in pairs(workspace:GetDescendants()) do
+                    local nearestPrompt = nil
+                    local shortestDist = r
+                    for _, o in ipairs(workspace:GetDescendants()) do
                         if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
                             local dist = (h.Position - o.Parent.Position).Magnitude
-                            if dist < d then
-                                cp = o
-                                d = dist
+                            if dist <= shortestDist then
+                                nearestPrompt = o
+                                shortestDist = dist
                             end
                         end
                     end
-                    if cp then
-                        fireproximityprompt(cp)
+                    if nearestPrompt then
+                        fireproximityprompt(nearestPrompt)
                     end
-                    task.wait()
+                    task.wait(0.3) -- slight delay for performance
                 end
             end)
         end
@@ -174,8 +174,8 @@ A:AddButton({
     text = "instant max hunger(hold any food)",
     callback = function()
         for i = 1, 20 do
-game:GetService("Players").LocalPlayer.Character.Cabbage.eat:FireServer()
-end
+            game:GetService("Players").LocalPlayer.Character.Cabbage.eat:FireServer()
+        end
     end
 })
 
