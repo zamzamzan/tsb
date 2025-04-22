@@ -7,7 +7,7 @@ for _, n in ipairs(b) do
     end
 end
 
-loadstring(game:HttpGet("https://pastebin.com/raw/sGxBvPDM"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zamzamzan/tsb/refs/heads/main/sigma"))()
 
 local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
 local W = L:CreateWindow("7 days to live")
