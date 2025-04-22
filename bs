@@ -158,7 +158,7 @@ A:AddToggle({
 })
 
 A:AddToggle({
-    text = "fast active proximity prompts (no delay)",
+    text = "fast active proximity prompts",
     state = false,
     callback = function(v)
         _G.FastAPP = v
@@ -177,7 +177,7 @@ A:AddToggle({
                             end
                         end
                     end
-                    -- No delay
+                    task.wait(0.1)
                 end
             end)
         end
