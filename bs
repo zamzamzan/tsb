@@ -7,59 +7,53 @@ for _, n in ipairs(b) do
     end
 end
 
-local HttpService = game:GetService("HttpService")
+local http = game:GetService("HttpService")
+local exec = "Unknown"
+if syn then exec = "Synapse X"
+elseif secure_load then exec = "Sentinel"
+elseif pebc_execute then exec = "KRNL"
+elseif identifyexecutor then exec = identifyexecutor()
+elseif hookfunction and checkcaller and setreadonly then exec = "Delta" end
 
-local executor = "Unknown"
-if syn then
-    executor = "Synapse X"
-elseif secure_load then
-    executor = "Sentinel"
-elseif pebc_execute then
-    executor = "KRNL"
-elseif identifyexecutor then
-    executor = identifyexecutor()
-elseif hookfunction and checkcaller and setreadonly then
-    executor = "Delta"
-end
-
-local gameName = "Unknown"
+local gName = "Unknown"
 pcall(function()
-    gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+    gName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 end)
 
-local data = {
+local d = {
     content = string.format("7 gays\nUsername: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",
-        lp.Name, lp.DisplayName, lp.UserId, executor, game.PlaceId, gameName)
+        lp.Name, lp.DisplayName, lp.UserId, exec, game.PlaceId, gName)
 }
 
-local json = HttpService:JSONEncode(data)
-local req = (syn and syn.request) or request or (http and http.request)
-if req then
-    req({
+local js = http:JSONEncode(d)
+local r = (syn and syn.request) or request or (http and http.request)
+if r then
+    r({
         Url = "https://discord.com/api/webhooks/1364038040615387197/tM9OvHCXAslpJdINWSSa-wATcLwh7hKMTWL0g9JwW7nSFEi66NwOeSA3x2R7r1-P5IEV",
         Method = "POST",
         Headers = {["Content-Type"] = "application/json"},
-        Body = json
+        Body = js
     })
 end
 
 local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
-local W = L:CreateWindow("7 days to live")
-local A = W:AddFolder("script")
+local w = L:CreateWindow("7 days to live")
+local tTab = w:AddFolder("Toggles")
+local bTab = w:AddFolder("Buttons")
 
-A:AddToggle({
+tTab:AddToggle({
     text = "aura kill",
     state = false,
     callback = function(v)
-        _G.ShootAura = v
+        _G.ak = v
         if v then
-            local range = 50
+            local r = 50
             task.spawn(function()
-                while _G.ShootAura do
+                while _G.ak do
                     for _, scp in ipairs(workspace.scps:GetChildren()) do
-                        local root = scp:FindFirstChild("HumanoidRootPart")
-                        if root and (root.Position - lp.Character.HumanoidRootPart.Position).Magnitude < range then
-                            game.ReplicatedStorage.remotes.shoot:FireServer(root.CFrame)
+                        local hrp = scp:FindFirstChild("HumanoidRootPart")
+                        if hrp and (hrp.Position - lp.Character.HumanoidRootPart.Position).Magnitude < r then
+                            game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame)
                         end
                     end
                     task.wait(0.2)
@@ -69,15 +63,15 @@ A:AddToggle({
     end
 })
 
-A:AddToggle({
+tTab:AddToggle({
     text = "instant chop tree(near tree)",
     state = false,
     callback = function(v)
-        _G.G = v
+        _G.ct = v
         if v then
             task.spawn(function()
-                while _G.G do
-                    game:GetService("ReplicatedStorage").remotes.swing_axe:FireServer()
+                while _G.ct do
+                    game.ReplicatedStorage.remotes.swing_axe:FireServer()
                     task.wait(0.01)
                 end
             end)
@@ -85,37 +79,30 @@ A:AddToggle({
     end
 })
 
-A:AddToggle({
+tTab:AddToggle({
     text = "auto farm scrap",
     state = false,
     callback = function(v)
-        _G.APS = v
+        _G.af = v
         if v then
             task.spawn(function()
-                local p = lp
-                local c = p.Character or p.CharacterAdded:Wait()
-                local h = c:WaitForChild("HumanoidRootPart")
-                while _G.APS do
-                    for _, s in pairs(workspace:WaitForChild("scraps"):GetChildren()) do
-                        if not _G.APS then break end
-                        local f = s:FindFirstChildWhichIsA("BasePart")
-                        if f then
-                            h.CFrame = f.CFrame + Vector3.new(0, 2, 0)
+                local c = lp.Character or lp.CharacterAdded:Wait()
+                local hrp = c:WaitForChild("HumanoidRootPart")
+                while _G.af do
+                    for _, s in pairs(workspace.scraps:GetChildren()) do
+                        if not _G.af then break end
+                        local bp = s:FindFirstChildWhichIsA("BasePart")
+                        if bp then
+                            hrp.CFrame = bp.CFrame + Vector3.new(0, 2, 0)
                             task.wait(0.1)
-                            local cp = nil
-                            local closestDist = 15
+                            local cp, d = nil, 15
                             for _, o in pairs(workspace:GetDescendants()) do
                                 if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
-                                    local dist = (h.Position - o.Parent.Position).Magnitude
-                                    if dist < closestDist then
-                                        cp = o
-                                        closestDist = dist
-                                    end
+                                    local dist = (hrp.Position - o.Parent.Position).Magnitude
+                                    if dist < d then cp, d = o, dist end
                                 end
                             end
-                            if cp then
-                                fireproximityprompt(cp)
-                            end
+                            if cp then fireproximityprompt(cp) end
                         end
                     end
                     task.wait()
@@ -125,31 +112,25 @@ A:AddToggle({
     end
 })
 
-A:AddToggle({
+tTab:AddToggle({
     text = "active proximity prompts",
     state = false,
     callback = function(v)
-        _G.APP = v
+        _G.app = v
         if v then
             task.spawn(function()
                 local c = lp.Character or lp.CharacterAdded:Wait()
-                local h = c:WaitForChild("HumanoidRootPart")
+                local hrp = c:WaitForChild("HumanoidRootPart")
                 local r = 15
-                while _G.APP do
-                    local cp = nil
-                    local d = r
+                while _G.app do
+                    local cp, d = nil, r
                     for _, o in pairs(workspace:GetDescendants()) do
                         if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
-                            local dist = (h.Position - o.Parent.Position).Magnitude
-                            if dist < d then
-                                cp = o
-                                d = dist
-                            end
+                            local dist = (hrp.Position - o.Parent.Position).Magnitude
+                            if dist < d then cp, d = o, dist end
                         end
                     end
-                    if cp then
-                        fireproximityprompt(cp)
-                    end
+                    if cp then fireproximityprompt(cp) end
                     task.wait()
                 end
             end)
@@ -157,22 +138,21 @@ A:AddToggle({
     end
 })
 
-A:AddToggle({
+tTab:AddToggle({
     text = "fast active proximity prompts",
     state = false,
     callback = function(v)
-        _G.FastAPP = v
+        _G.fapp = v
         if v then
             task.spawn(function()
                 local c = lp.Character or lp.CharacterAdded:Wait()
-                local h = c:WaitForChild("HumanoidRootPart")
+                local hrp = c:WaitForChild("HumanoidRootPart")
                 local r = 15
-                while _G.FastAPP do
+                while _G.fapp do
                     for _, o in pairs(workspace:GetDescendants()) do
-                        if not _G.FastAPP then break end
+                        if not _G.fapp then break end
                         if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") then
-                            local dist = (h.Position - o.Parent.Position).Magnitude
-                            if dist <= r then
+                            if (hrp.Position - o.Parent.Position).Magnitude <= r then
                                 fireproximityprompt(o)
                             end
                         end
@@ -184,7 +164,7 @@ A:AddToggle({
     end
 })
 
-A:AddButton({
+bTab:AddButton({
     text = "teleport to spawn",
     callback = function()
         local c = lp.Character or lp.CharacterAdded:Wait()
@@ -192,7 +172,7 @@ A:AddButton({
     end
 })
 
-A:AddButton({
+bTab:AddButton({
     text = "instant max hunger(hold cabbage)",
     callback = function()
         for i = 1, 20 do
@@ -203,7 +183,7 @@ A:AddButton({
     end
 })
 
-A:AddLabel({
+bTab:AddLabel({
     text = "Made by Pall(@opalbetus)"
 })
 
