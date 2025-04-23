@@ -193,7 +193,7 @@ A:AddButton({
 })
 
 A:AddButton({
-    text = "instant max hunger(hold any food)",
+    text = "instant max hunger(hold cabbage)",
     callback = function()
         for i = 1, 20 do
             pcall(function()
