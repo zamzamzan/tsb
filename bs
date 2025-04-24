@@ -1,4 +1,4 @@
---// dis script is made with chatgpt/deepseek/ meta ai/robloc ai
+--// dis is a chatgot/deepsaak/gemini commant
 local b = {"CahyaXyZp", "bludisdancer"}
 local lp = game.Players.LocalPlayer
 for _, n in ipairs(b) do
@@ -36,7 +36,8 @@ if r then
         Body = js
     })
 end
---//fuww skrip
+
+--// UI + Features
 local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
 local w = L:CreateWindow("7 days to live")
 local tTab = w:AddFolder("toggles")
@@ -51,10 +52,15 @@ tTab:AddToggle({
             local r = 50
             task.spawn(function()
                 while _G.ak do
-                    for _, scp in ipairs(workspace.scps:GetChildren()) do
-                        local target = scp:FindFirstChild("Head") or scp:FindFirstChild("Torso") or scp:FindFirstChild("UpperTorso") or scp:FindFirstChild("HumanoidRootPart")
-                        if target and (target.Position - lp.Character.HumanoidRootPart.Position).Magnitude < r then
-                            game.ReplicatedStorage.remotes.shoot:FireServer(target.CFrame)
+                    local char = lp.Character
+                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        for _, scp in ipairs(workspace.scps:GetChildren()) do
+                            local target = scp:FindFirstChild("HumanoidRootPart") or scp:FindFirstChild("Head") or scp:FindFirstChild("Torso") or scp:FindFirstChild("UpperTorso")
+                            local hum = scp:FindFirstChildWhichIsA("Humanoid")
+                            if target and hum and hum.Health > 0 and (target.Position - hrp.Position).Magnitude < r then
+                                game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame, target.CFrame)
+                            end
                         end
                     end
                     task.wait(0.2)
