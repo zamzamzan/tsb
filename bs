@@ -56,10 +56,16 @@ tTab:AddToggle({
                     local hrp = char and char:FindFirstChild("HumanoidRootPart")
                     if hrp then
                         for _, scp in ipairs(workspace.scps:GetChildren()) do
-                            local target = scp:FindFirstChild("HumanoidRootPart") or scp:FindFirstChild("Head") or scp:FindFirstChild("Torso") or scp:FindFirstChild("UpperTorso")
                             local hum = scp:FindFirstChildWhichIsA("Humanoid")
-                            if target and hum and hum.Health > 0 and (target.Position - hrp.Position).Magnitude < r then
-                                game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame, target.CFrame)
+                            local targetPart = scp:FindFirstChild("HumanoidRootPart") or scp:FindFirstChild("Head") or scp:FindFirstChild("Torso") or scp:FindFirstChild("UpperTorso")
+                            if hum and targetPart and hum.Health > 0 then
+                                local dist = (targetPart.Position - hrp.Position).Magnitude
+                                if dist <= r then
+                                    local originCFrame = hrp.CFrame
+                                    local direction = (targetPart.Position - hrp.Position).Unit
+                                    local targetCFrame = CFrame.new(targetPart.Position, targetPart.Position + direction)
+                                    game.ReplicatedStorage.remotes.shoot:FireServer(originCFrame, targetCFrame)
+                                end
                             end
                         end
                     end
