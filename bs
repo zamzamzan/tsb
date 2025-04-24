@@ -1,3 +1,4 @@
+--// dis script is made with chatgpt/deepseek/ meta ai/robloc ai
 local b = {"CahyaXyZp", "bludisdancer"}
 local lp = game.Players.LocalPlayer
 for _, n in ipairs(b) do
@@ -35,11 +36,11 @@ if r then
         Body = js
     })
 end
-
+--//fuww skrip
 local L = loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
 local w = L:CreateWindow("7 days to live")
-local tTab = w:AddFolder("Toggles")
-local bTab = w:AddFolder("Buttons")
+local tTab = w:AddFolder("toggles")
+local bTab = w:AddFolder("buttons")
 
 tTab:AddToggle({
     text = "aura kill",
@@ -51,9 +52,9 @@ tTab:AddToggle({
             task.spawn(function()
                 while _G.ak do
                     for _, scp in ipairs(workspace.scps:GetChildren()) do
-                        local hrp = scp:FindFirstChild("HumanoidRootPart")
-                        if hrp and (hrp.Position - lp.Character.HumanoidRootPart.Position).Magnitude < r then
-                            game.ReplicatedStorage.remotes.shoot:FireServer(hrp.CFrame)
+                        local target = scp:FindFirstChild("Head") or scp:FindFirstChild("Torso") or scp:FindFirstChild("UpperTorso") or scp:FindFirstChild("HumanoidRootPart")
+                        if target and (target.Position - lp.Character.HumanoidRootPart.Position).Magnitude < r then
+                            game.ReplicatedStorage.remotes.shoot:FireServer(target.CFrame)
                         end
                     end
                     task.wait(0.2)
@@ -113,7 +114,7 @@ tTab:AddToggle({
 })
 
 tTab:AddToggle({
-    text = "active proximity prompts",
+    text = "fast active proximity prompts",
     state = false,
     callback = function(v)
         _G.app = v
@@ -139,7 +140,7 @@ tTab:AddToggle({
 })
 
 tTab:AddToggle({
-    text = "fast active proximity prompts",
+    text = "active proximity prompts",
     state = false,
     callback = function(v)
         _G.fapp = v
@@ -173,11 +174,17 @@ bTab:AddButton({
 })
 
 bTab:AddButton({
-    text = "instant max hunger(hold cabbage)",
+    text = "instant max hunger(any food)",
     callback = function()
         for i = 1, 20 do
             pcall(function()
                 lp.Character.Cabbage.eat:FireServer()
+            end)
+            pcall(function()
+                lp.Character.Beans.eat:FireServer()
+            end)
+            pcall(function()
+                lp.Character.Berry.eat:FireServer()
             end)
         end
     end
