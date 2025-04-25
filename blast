@@ -1,162 +1,128 @@
-local b = {"CahyaXyZp", "bludisdancer"}
-local lp = game.Players.LocalPlayer
-for _, n in ipairs(b) do
-    if lp.Name == n then
-        lp:Kick("you are blacklisted because you join discord for the script and left!")
-        break
-    end
+local b={"CahyaXyZp","bludisdancer"}
+local lp=game.Players.LocalPlayer
+for _,n in ipairs(b)do
+if lp.Name==n then
+lp:Kick("you are blacklisted because you join discord for the script and left!")
+break
 end
-
-local HttpService = game:GetService("HttpService")
-local lp = game.Players.LocalPlayer
-
-local executor = "Unknown"
+end
+local HttpService=game:GetService("HttpService")
+local executor="Unknown"
 if syn then
-    executor = "Synapse X"
+executor="Synapse X"
 elseif secure_load then
-    executor = "Sentinel"
+executor="Sentinel"
 elseif pebc_execute then
-    executor = "KRNL"
+executor="KRNL"
 elseif identifyexecutor then
-    executor = identifyexecutor()
+executor=identifyexecutor()
 elseif hookfunction and checkcaller and setreadonly then
-    executor = "Delta"
+executor="Delta"
 end
-
-local gameName = "Unknown"
+local gameName="Unknown"
 pcall(function()
-    gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+gameName=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 end)
-
-local data = {
-    content = string.format("blast\nUsername: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",
-        lp.Name, lp.DisplayName, lp.UserId, executor, game.PlaceId, gameName)
+local data={
+content=string.format("blast\nUsername: %s\nDisplay Name: %s\nUser ID: %s\nExecutor: %s\nPlace ID: %s\nPlace Name: %s",lp.Name,lp.DisplayName,lp.UserId,executor,game.PlaceId,gameName)
 }
-
-local json = HttpService:JSONEncode(data)
-
-local req = (syn and syn.request) or request or (http and http.request)
+local json=HttpService:JSONEncode(data)
+local req=(syn and syn.request)or request or(http and http.request)
 if req then
-    req({
-        Url = "https://discord.com/api/webhooks/1364038040615387197/tM9OvHCXAslpJdINWSSa-wATcLwh7hKMTWL0g9JwW7nSFEi66NwOeSA3x2R7r1-P5IEV",
-        Method = "POST",
-        Headers = {["Content-Type"] = "application/json"},
-        Body = json
-    })
+req({
+Url="https://discord.com/api/webhooks/1364038040615387197/tM9OvHCXAslpJdINWSSa-wATcLwh7hKMTWL0g9JwW7nSFEi66NwOeSA3x2R7r1-P5IEV",
+Method="POST",
+Headers={["Content-Type"]="application/json"},
+Body=json
+})
 end
-
-local plr = game.Players.LocalPlayer
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jensonhirst/Orion/main/source"))()
-
-local win = lib:MakeWindow({
-	Name = "Teleport to Chest v1.1",
-	HidePremium = true,
-	IntroEnabled = true,
-	IntroText = "3-2-1 Blast off simulator",
-	IntroIcon = "rbxassetid://7733946818",
-	ToggleIcon = "rbxassetid://7733946818"
-})
-
-local tab1 = win:MakeTab({Name = "Island Teleports", Icon = "rbxassetid://7733946818"})
-local tab2 = win:MakeTab({Name = "Dimension Teleports", Icon = "rbxassetid://7733946818"})
-
-lib:MakeNotification({
-	Name = "Made by Opalbetus",
-	Content = "Made by Opalbetus",
-	Image = "rbxassetid://4483345998",
-	Time = 3
-})
-
+local plr=game.Players.LocalPlayer
+local lib=loadstring(game:HttpGet("https://raw.githubusercontent.com/jensonhirst/Orion/main/source"))()
+local win=lib:MakeWindow({Name="Teleport to Chest v1.1",HidePremium=true,IntroEnabled=true,IntroText="3-2-1 Blast off simulator",IntroIcon="rbxassetid://7733946818",ToggleIcon="rbxassetid://7733946818"})
+local tab1=win:MakeTab({Name="Island Teleports",Icon="rbxassetid://7733946818"})
+local tab2=win:MakeTab({Name="Dimension Teleports",Icon="rbxassetid://7733946818"})
+lib:MakeNotification({Name="Made by Opalbetus",Content="Made by Opalbetus",Image="rbxassetid://4483345998",Time=3})
 local function getTarget(path)
-	local islands = workspace:FindFirstChild("Islands")
-	if not islands then return nil end
-	local tgt = islands
-	for _, seg in ipairs(path) do
-		tgt = tgt:FindFirstChild(seg)
-		if not tgt then return nil end
-	end
-	return tgt
+local islands=workspace:FindFirstChild("Islands")
+if not islands then return nil end
+local tgt=islands
+for _,seg in ipairs(path)do
+tgt=tgt:FindFirstChild(seg)
+if not tgt then return nil end
 end
-
+return tgt
+end
 local function tp(tgt)
-	local char = plr.Character or plr.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
-	if tgt then hrp.CFrame = tgt.CFrame end
+local char=plr.Character or plr.CharacterAdded:Wait()
+local hrp=char:WaitForChild("HumanoidRootPart")
+if tgt then hrp.CFrame=tgt.CFrame end
 end
-
-local locs = {
-	["Dimension 1"] = {
-		["1"] = {"CloudIsland", "Obby", "PrizeChest", "Chest"},
-		["2"] = {"FloatingIsland", "Obby", "Prize", "PrizeChest", "Chest"},
-		["3"] = {"BeeIsland", "Prize", "PrizeChest", "Chest"},
-		["4"] = {"SatelliteIsland", "Prize", "PrizeChest", "Chest"},
-		["5"] = {"MoonIsland", "Prize", "PrizeChest", "Chest"},
-		["6"] = {"SpaceRocksIsland", "Prize", "PrizeChest", "Chest"},
-		["7"] = {"DarkMatterIsland", "Prize", "PrizeChest", "Chest"},
-		["8"] = {"FallingStar", "Prize", "PrizeChest", "Chest"},
-		["9"] = {"Vanish", "Prize", "PrizeChest", "Chest"},
-		["10"] = {"MarsStationZero", "Station", "Prize", "PrizeChest", "Chest"}
-	},
-	["Dimension 2"] = {
-		["1"] = {"UFORepair", "PrizeChest", "Chest"},
-		["2"] = {"MoonlingObby", "PrizeChest", "Chest"},
-		["3"] = {"FireFly", "PrizeChest", "Chest"},
-		["4"] = {"SpaceGun", "PrizeChest", "Chest"},
-		["5"] = {"MazeOfReflection", "PrizeChest", "Chest"}
-	},
-	["Dimension 3"] = {
-		["1"] = {"RapscallionsMaze", "PrizeChest", "Chest"},
-		["2"] = {"HelpOrHinder", "Obby", "Part4", "Prize", "PrizeChest", "Chest"},
-		["3"] = {"CopyCat", "PrizeChest", "Chest"},
-		["4"] = {"Singularity", "PrizeChest", "Chest"},
-		["5"] = {"TheGrobs", "PrizeChest", "Chest"},
-		["6"] = {"CodeBreaker", "PrizeChest", "Chest"}
-	}
+local locs={
+["Dimension 1"]={
+["1"]={"CloudIsland","Obby","PrizeChest","Chest"},
+["2"]={"FloatingIsland","Obby","Prize","PrizeChest","Chest"},
+["3"]={"BeeIsland","Prize","PrizeChest","Chest"},
+["4"]={"SatelliteIsland","Prize","PrizeChest","Chest"},
+["5"]={"MoonIsland","Prize","PrizeChest","Chest"},
+["6"]={"SpaceRocksIsland","Prize","PrizeChest","Chest"},
+["7"]={"DarkMatterIsland","Prize","PrizeChest","Chest"},
+["8"]={"FallingStar","Prize","PrizeChest","Chest"},
+["9"]={"Vanish","Prize","PrizeChest","Chest"},
+["10"]={"MarsStationZero","Station","Prize","PrizeChest","Chest"}
+},
+["Dimension 2"]={
+["1"]={"UFORepair","PrizeChest","Chest"},
+["2"]={"MoonlingObby","PrizeChest","Chest"},
+["3"]={"FireFly","PrizeChest","Chest"},
+["4"]={"SpaceGun","PrizeChest","Chest"},
+["5"]={"MazeOfReflection","PrizeChest","Chest"}
+},
+["Dimension 3"]={
+["1"]={"RapscallionsMaze","PrizeChest","Chest"},
+["2"]={"HelpOrHinder","Obby","Part4","Prize","PrizeChest","Chest"},
+["3"]={"CopyCat","PrizeChest","Chest"},
+["4"]={"Singularity","PrizeChest","Chest"},
+["5"]={"TheGrobs","PrizeChest","Chest"},
+["6"]={"CodeBreaker","PrizeChest","Chest"}
 }
-
-for d, l in pairs(locs) do
-	local opts = {}
-	for i in pairs(l) do
-		table.insert(opts, i)
-	end
-	tab1:AddDropdown({
-		Name = d,
-		Default = "",
-		Options = opts,
-		Callback = function(val)
-			tp(getTarget(l[val]))
-		end
-	})
+}
+for d,l in pairs(locs)do
+local opts={}
+for i in pairs(l)do
+table.insert(opts,i)
 end
-
+tab1:AddDropdown({
+Name=d,
+Default="",
+Options=opts,
+Callback=function(val)
+tp(getTarget(l[val]))
+end
+})
+end
 tab1:AddButton({
-	Name = "Rank up (use in dimension 1)",
-	Callback = function()
-		local c = plr.Character or plr.CharacterAdded:Wait()
-		local r = c:FindFirstChild("HumanoidRootPart")
-		if r then r.CFrame = CFrame.new(6, 33966, -16) end
-	end
-})
-
-local function tpGame(id)
-	local ts = game:GetService("TeleportService")
-	pcall(function()
-		ts:Teleport(id)
-	end)
+Name="Rank up (use in dimension 1)",
+Callback=function()
+local c=plr.Character or plr.CharacterAdded:Wait()
+local r=c:FindFirstChild("HumanoidRootPart")
+if r then r.CFrame=CFrame.new(6,33966,-16)end
 end
-
-tab2:AddButton({Name = "Teleport to Dimension 1", Callback = function() tpGame(5256165620) end})
-tab2:AddButton({Name = "Teleport to Dimension 2", Callback = function() tpGame(8015075184) end})
-tab2:AddButton({Name = "Teleport to Dimension 3", Callback = function() tpGame(15836716217) end})
-
-tab1:AddParagraph("Made by Opalbetus", "")
-tab1:AddParagraph("Sorry if there is a missing island", "")
-
-tab2:AddButton({
-	Name = "destroy library",
-	Callback = function()
-		lib:Destroy()
-	end
 })
-
+local function tpGame(id)
+local ts=game:GetService("TeleportService")
+pcall(function()
+ts:Teleport(id)
+end)
+end
+tab2:AddButton({Name="Teleport to Dimension 1",Callback=function()tpGame(5256165620)end})
+tab2:AddButton({Name="Teleport to Dimension 2",Callback=function()tpGame(8015075184)end})
+tab2:AddButton({Name="Teleport to Dimension 3",Callback=function()tpGame(15836716217)end})
+tab1:AddParagraph("Made by Opalbetus","")
+tab1:AddParagraph("Sorry if there is a missing island","")
+tab2:AddButton({
+Name="destroy library",
+Callback=function()
+lib:Destroy()
+end
+})
 lib:Init()
