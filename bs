@@ -138,7 +138,7 @@ tTab:AddToggle({
                             fireproximityprompt(o)
                         end
                     end
-                    task.wait()
+                    task.wait(0.001)
                 end
             end)
         end
