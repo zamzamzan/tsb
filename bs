@@ -52,7 +52,7 @@ tTab:AddToggle({
     callback = function(state)
         _G.ak = state
         if state then
-            local radius = 50
+            local radius = 100
             task.spawn(function()
                 while _G.ak do
                     local char = lp.Character
