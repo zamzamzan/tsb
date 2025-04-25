@@ -1,6 +1,6 @@
 local lp = game.Players.LocalPlayer
 
--- //bl check
+--// bl check
 local blacklist = {"CahyaXyZp", "bludisdancer"}
 for _, n in ipairs(blacklist) do
     if lp.Name == n then
@@ -9,7 +9,7 @@ for _, n in ipairs(blacklist) do
     end
 end
 
--- //exe detection & webhook
+--// exe detection & webhook
 local http = game:GetService("HttpService")
 local exec = "Unknown"
 if syn then exec = "Synapse X"
