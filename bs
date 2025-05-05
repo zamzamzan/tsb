@@ -16,10 +16,22 @@ local w=L:CreateWindow("7 days to live")
 local t=w:AddFolder("toggles")
 local b=w:AddFolder("buttons")
 
+local auraRange = 75
+_G.auraRange = auraRange
+
+t:AddSlider({
+    text = "kill aura range",
+    min = 1,
+    max = 5000,
+    float = 1,
+    callback = function(Value)
+        _G.auraRange = Value
+    end
+})
+
 t:AddToggle({text="aura kill",state=false,callback=function(s)
     _G.ak=s
     if s then
-        local r=75
         task.spawn(function()
             while _G.ak do
                 local c=lp.Character
@@ -30,7 +42,7 @@ t:AddToggle({text="aura kill",state=false,callback=function(s)
                         local hum=scp:FindFirstChildWhichIsA("Humanoid")
                         if t and hum and hum.Health>0 then
                             local d=(t.Position-h.Position).Magnitude
-                            if d<r then
+                            if d<_G.auraRange then
                                 local f=t.CFrame+Vector3.new(0,0.5,0)
                                 local to=t.CFrame
                                 game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
@@ -42,7 +54,7 @@ t:AddToggle({text="aura kill",state=false,callback=function(s)
                         local hum=animal:FindFirstChildWhichIsA("Humanoid")
                         if t and hum and hum.Health>0 then
                             local d=(t.Position-h.Position).Magnitude
-                            if d<r then
+                            if d<_G.auraRange then
                                 local f=t.CFrame+Vector3.new(0,0.5,0)
                                 local to=t.CFrame
                                 game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
@@ -51,22 +63,6 @@ t:AddToggle({text="aura kill",state=false,callback=function(s)
                     end
                 end
                 task.wait(0.25)
-            end
-        end)
-    end
-end})
-
-t:AddToggle({text="instant chop tree/crystal",state=false,callback=function(v)
-    _G.ct=v
-    if v then
-        task.spawn(function()
-            while _G.ct do
-                if game.PlaceId==121308443347459 then
-                    game.ReplicatedStorage.remotes.swing_axe:FireServer()
-                elseif game.PlaceId==77970919775750 then
-                    game:GetService("ReplicatedStorage").remotes.swing_pickaxe:FireServer()
-                end
-                task.wait(0.01)
             end
         end)
     end
