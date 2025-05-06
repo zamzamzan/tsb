@@ -9,7 +9,7 @@ pcall(function()gName=game:GetService("MarketplaceService"):GetProductInfo(game.
 local data={content=("7 gays\nUsername: "..lp.Name.."\nDisplay Name: "..lp.DisplayName.."\nUser ID: "..lp.UserId.."\nExecutor: "..exec.."\nPlace ID: "..game.PlaceId.."\nPlace Name: "..gName)}
 local js=http:JSONEncode(data)
 local req=syn and syn.request or request or http and http.request
-if req then req({Url="https://discord.com/api/webhooks/1368031946579640430/8hv3wKSTXVX-DQZRm0m4HKGGTrjjXX5_uAwdioB09U_LH54Pv6h1kqKeqSX2WAzp5HlW",Method="POST",Headers={["Content-Type"]="application/json"},Body=js})end
+if req then req({Url="https://discord.com/api/webhooks/1368031961356173465/tl188FkhXVcJNeLz4ublSnu-TB4lHhO0TKZ_va0cAQXm2nXDnBISdTd3i_8K82Lh-9WP",Method="POST",Headers={["Content-Type"]="application/json"},Body=js})end
 
 local L=loadstring(game:HttpGet("https://raw.githubusercontent.com/0-BaconScripter-0/Mobile-Support-For-UI-Library/refs/heads/main/Unnamed.lua"))()
 local w=L:CreateWindow("7 days to live")
