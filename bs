@@ -163,6 +163,10 @@ b:AddButton({text="instant max hunger (any food)",callback=function()
     end
 end})
 
+b:AddButton({text="fly gui",callback=function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()
+end})
+
 b:AddLabel({text="Made by Pall(@opalbetus)"})
 b:AddLabel({text="https://discord.gg/TbK2NWqS5R"})
 L:Init()
