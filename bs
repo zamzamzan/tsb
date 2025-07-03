@@ -1,4 +1,11 @@
 --//jerkle and kizzy leave me alone🙏🏿
+--/frist time using hookfunction
+
+hookfunction(setclipboard, function()
+game.Players.LocalPlayer:Kick("hey skids")
+    return
+end)
+
 local lp=game.Players.LocalPlayer
 local bl={"CahyaXyZp","bludisdancer"}
 for _,n in ipairs(bl)do if lp.Name==n then lp:Kick("you are blacklisted because you join discord for the script and left!")break end end
