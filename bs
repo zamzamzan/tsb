@@ -3,7 +3,7 @@
 
 hookfunction(setclipboard, function()
 game.Players.LocalPlayer:Kick("hey skids")
-    return
+return
 end)
 
 local lp=game.Players.LocalPlayer
