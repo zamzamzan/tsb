@@ -122,31 +122,6 @@ t:AddToggle({text="esp spy", state=false, callback=function(v)
     end)
 end})
 
-t:AddToggle({text="auto farm scrap",state=false,callback=function(v)
-    _G.af = v
-    if v then
-        task.spawn(function()
-            local h = lp.Character:WaitForChild("HumanoidRootPart")
-            while _G.af do
-                for _, s in pairs(workspace.scraps:GetChildren()) do
-                    if not _G.af then break end
-                    local bp = s:FindFirstChildWhichIsA("BasePart")
-                    if bp then
-                        h.CFrame = bp.CFrame + Vector3.new(0, 2, 0)
-                        task.wait(0.1)
-                        for _, o in pairs(workspace:GetDescendants()) do
-                            if o:IsA("ProximityPrompt") and o.Parent:IsA("BasePart") and (h.Position - o.Parent.Position).Magnitude < 15 then
-                                fireproximityprompt(o)
-                            end
-                        end
-                    end
-                end
-                task.wait()
-            end
-        end)
-    end
-end})
-
 t:AddToggle({text="active proximity prompts",state=false,callback=function(v)
     _G.app = v
     if v then
