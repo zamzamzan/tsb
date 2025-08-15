@@ -122,6 +122,33 @@ t:AddToggle({text="esp spy", state=false, callback=function(v)
     end)
 end})
 
+t:AddToggle({text="auto farm cordage",state=false,callback=function(v)
+    _G.aflax = v
+    if v then
+        task.spawn(function()
+            local h = lp.Character:WaitForChild("HumanoidRootPart")
+            while _G.aflax do
+                for _, plant in pairs(workspace.harvest:GetChildren()) do
+                    if not _G.aflax then break end
+                    if plant.Name:lower() == "flax" then
+                        local bp = plant:FindFirstChildWhichIsA("BasePart")
+                        if bp then
+                            h.CFrame = bp.CFrame + Vector3.new(0, 2, 0)
+                            task.wait(0.1)
+                            for _, o in pairs(plant:GetDescendants()) do
+                                if o:IsA("ProximityPrompt") then
+                                    fireproximityprompt(o)
+                                end
+                            end
+                        end
+                    end
+                end
+                task.wait()
+            end
+        end)
+    end
+end})
+
 t:AddToggle({text="active proximity prompts",state=false,callback=function(v)
     _G.app = v
     if v then
