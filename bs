@@ -50,11 +50,76 @@ t:AddToggle({text="aura kill",state=false,callback=function(s)
                             end
                         end
                     end
+                    if workspace:FindFirstChild("enemies") then
+                        for _, spy in ipairs(workspace.enemies:GetChildren()) do
+                            local spyHead = spy:FindFirstChild("Head")
+                            local hum = spy:FindFirstChildWhichIsA("Humanoid")
+                            if spyHead and hum and hum.Health > 0 then
+                                local d = (spyHead.Position - h.Position).Magnitude
+                                if d < _G.auraRange then
+                                    local f = spyHead.CFrame + Vector3.new(0, 0.5, 0)
+                                    local to = spyHead.CFrame
+                                    game.ReplicatedStorage.remotes.shoot:FireServer(f, to)
+                                end
+                            end
+                        end
+                    end
                 end
                 task.wait(0.25)
             end
         end)
     end
+end})
+
+t:AddToggle({text="esp spy", state=false, callback=function(v)
+    _G.spyESP = v
+    if not _G.spyESPList then
+        _G.spyESPList = {}
+    end
+    local function clearESP()
+        for _, esp in pairs(_G.spyESPList) do
+            if esp and esp.Parent then
+                esp:Destroy()
+            end
+        end
+        _G.spyESPList = {}
+    end
+    if not v then
+        clearESP()
+        return
+    end
+    task.spawn(function()
+        while _G.spyESP do
+            for spy, esp in pairs(_G.spyESPList) do
+                if not spy.Parent then
+                    esp:Destroy()
+                    _G.spyESPList[spy] = nil
+                end
+            end
+            for _, spyModel in ipairs(workspace:FindFirstChild("enemies") and workspace.enemies:GetChildren() or {}) do
+                if spyModel:FindFirstChild("Head") and not _G.spyESPList[spyModel] then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Adornee = spyModel.Head
+                    billboard.Size = UDim2.new(0, 200, 0, 50)
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.AlwaysOnTop = true
+                    local label = Instance.new("TextLabel")
+                    label.Size = UDim2.new(1, 0, 1, 0)
+                    label.BackgroundTransparency = 1
+                    label.Text = "SPY"
+                    label.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    label.TextStrokeTransparency = 0
+                    label.TextScaled = true
+                    label.Font = Enum.Font.GothamBold
+                    label.Parent = billboard
+                    billboard.Parent = spyModel.Head
+                    _G.spyESPList[spyModel] = billboard
+                end
+            end
+            task.wait(0.2)
+        end
+        clearESP()
+    end)
 end})
 
 t:AddToggle({text="auto farm scrap",state=false,callback=function(v)
