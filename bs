@@ -166,18 +166,28 @@ t:AddToggle({text="active proximity prompts",state=false,callback=function(v)
     end
 end})
 
+t:AddToggle({text="auto fish",state=false,callback=function(v)
+    _G.autofish = v
+    if v then
+        task.spawn(function()
+            task.spawn(function()
+                while _G.autofish and task.wait(0.01) do
+                    game:GetService("ReplicatedStorage").remotes.fish_point:FireServer(true)
+                end
+            end)
+            task.spawn(function()
+                while _G.autofish and task.wait(0.5) do
+                    game:GetService("ReplicatedStorage").remotes.cast:FireServer()
+                end
+            end)
+        end)
+    end
+end})
+
 b:AddButton({text="teleport to spawn",callback=function()
     local spawn = workspace:FindFirstChild("SpawnLocation")
     if spawn and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
         lp.Character.HumanoidRootPart.CFrame = spawn.CFrame
-    end
-end})
-
-b:AddButton({text="instant max hunger (any food)",callback=function()
-    for i = 1, 20 do
-        pcall(function() lp.Character.Cabbage.eat:FireServer() end)
-        pcall(function() lp.Character.Beans.eat:FireServer() end)
-        pcall(function() lp.Character.Berry.eat:FireServer() end)
     end
 end})
 
