@@ -27,7 +27,7 @@ t:CreateSlider({
 })
 
 t:CreateToggle({
-    Name="aura kill",
+    Name="aura kill(hold ur gun)",
     CurrentValue=false,
     Flag="k",
     Callback=function(s)
@@ -169,7 +169,7 @@ t:CreateToggle({
 
 local g_fish=false
 t:CreateToggle({
-    Name="auto fish",
+    Name="auto fish (hold fishing rod)",
     CurrentValue=false,
     Callback=function(v)
         g_fish=v
