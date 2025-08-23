@@ -176,22 +176,25 @@ t:AddToggle({
         _G.autofish=v
         if v then
             task.spawn(function()
-                -- keep fish_point spam
+               
                 task.spawn(function()
                     while _G.autofish and task.wait(0.01) do
                         game:GetService("ReplicatedStorage").remotes.fish_point:FireServer(true)
                     end
                 end)
-                -- simulate screen click every 0.5s at center
+                
                 task.spawn(function()
-                    local vim = game:GetService("VirtualInputManager")
-                    local camera = workspace.CurrentCamera
-                    while _G.autofish and task.wait(0.9) do
-                        local x = camera.ViewportSize.X/2
-                        local y = camera.ViewportSize.Y/2
-                        vim:SendMouseButtonEvent(x, y, 0, true, game, 1)
-                        task.wait(0.05)
-                        vim:SendMouseButtonEvent(x, y, 0, false, game, 1)
+                    local remotes=game:GetService("ReplicatedStorage"):WaitForChild("remotes")
+                    local castRemote=remotes:WaitForChild("cast")
+                    while _G.autofish do
+                        local char=lp.Character or lp.CharacterAdded:Wait()
+                        local hrp=char:WaitForChild("HumanoidRootPart")
+                        local forwardVector=hrp.CFrame.LookVector
+                        local targetPos=hrp.Position+(forwardVector*50)
+                        pcall(function()
+                            castRemote:FireServer(targetPos)
+                        end)
+                        task.wait(0.5)
                     end
                 end)
             end)
