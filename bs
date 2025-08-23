@@ -4,236 +4,235 @@ local w=L:CreateWindow("7 days to live")
 local t=w:AddFolder("toggles")
 local b=w:AddFolder("buttons")
 
-local auraRange=75
-_G.auraRange=auraRange
+local ar=75
+_G.ar=ar
 
 t:AddSlider({
-    text="kill aura range",
-    min=1,
-    max=5000,
-    float=1,
-    callback=function(Value)
-        _G.auraRange=Value
-    end
+text="kill aura range",
+min=1,
+max=5000,
+float=1,
+callback=function(v)
+_G.ar=v
+end
 })
 
 t:AddToggle({
-    text="aura kill",
-    state=false,
-    callback=function(s)
-        _G.ak=s
-        if s then
-            task.spawn(function()
-                while _G.ak do
-                    local c=lp.Character
-                    local h=c and c:FindFirstChild("HumanoidRootPart")
-                    if h then
-                        for _,scp in ipairs(workspace.scps:GetChildren())do
-                            local t=scp:FindFirstChild("HumanoidRootPart")or scp:FindFirstChild("Head")
-                            local hum=scp:FindFirstChildWhichIsA("Humanoid")
-                            if t and hum and hum.Health>0 then
-                                local d=(t.Position-h.Position).Magnitude
-                                if d<_G.auraRange then
-                                    local f=t.CFrame+Vector3.new(0,0.5,0)
-                                    local to=t.CFrame
-                                    game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
-                                end
-                            end
-                        end
-                        for _,animal in ipairs(workspace.animals:GetChildren())do
-                            local t=animal:FindFirstChild("HumanoidRootPart")or animal:FindFirstChild("Head")
-                            local hum=animal:FindFirstChildWhichIsA("Humanoid")
-                            if t and hum and hum.Health>0 then
-                                local d=(t.Position-h.Position).Magnitude
-                                if d<_G.auraRange then
-                                    local f=t.CFrame+Vector3.new(0,0.5,0)
-                                    local to=t.CFrame
-                                    game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
-                                end
-                            end
-                        end
-                        if workspace:FindFirstChild("enemies")then
-                            for _,spy in ipairs(workspace.enemies:GetChildren())do
-                                local spyHead=spy:FindFirstChild("Head")
-                                local hum=spy:FindFirstChildWhichIsA("Humanoid")
-                                if spyHead and hum and hum.Health>0 then
-                                    local d=(spyHead.Position-h.Position).Magnitude
-                                    if d<_G.auraRange then
-                                        local f=spyHead.CFrame+Vector3.new(0,0.5,0)
-                                        local to=spyHead.CFrame
-                                        game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
-                                    end
-                                end
-                            end
-                        end
-                    end
-                    task.wait(0.25)
-                end
-            end)
-        end
-    end
+text="aura kill",
+state=false,
+callback=function(s)
+_G.ak=s
+if s then
+task.spawn(function()
+while _G.ak do
+local c=lp.Character
+local h=c and c:FindFirstChild("HumanoidRootPart")
+if h then
+for _,x in ipairs(workspace.scps:GetChildren())do
+local y=x:FindFirstChild("HumanoidRootPart")or x:FindFirstChild("Head")
+local hm=x:FindFirstChildWhichIsA("Humanoid")
+if y and hm and hm.Health>0 then
+local d=(y.Position-h.Position).Magnitude
+if d<_G.ar then
+local f=y.CFrame+Vector3.new(0,0.5,0)
+local to=y.CFrame
+game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
+end
+end
+end
+for _,x in ipairs(workspace.animals:GetChildren())do
+local y=x:FindFirstChild("HumanoidRootPart")or x:FindFirstChild("Head")
+local hm=x:FindFirstChildWhichIsA("Humanoid")
+if y and hm and hm.Health>0 then
+local d=(y.Position-h.Position).Magnitude
+if d<_G.ar then
+local f=y.CFrame+Vector3.new(0,0.5,0)
+local to=y.CFrame
+game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
+end
+end
+end
+if workspace:FindFirstChild("enemies")then
+for _,x in ipairs(workspace.enemies:GetChildren())do
+local y=x:FindFirstChild("Head")
+local hm=x:FindFirstChildWhichIsA("Humanoid")
+if y and hm and hm.Health>0 then
+local d=(y.Position-h.Position).Magnitude
+if d<_G.ar then
+local f=y.CFrame+Vector3.new(0,0.5,0)
+local to=y.CFrame
+game.ReplicatedStorage.remotes.shoot:FireServer(f,to)
+end
+end
+end
+end
+end
+task.wait(0.25)
+end
+end)
+end
+end
 })
 
 t:AddToggle({
-    text="esp spy",
-    state=false,
-    callback=function(v)
-        _G.spyESP=v
-        if not _G.spyESPList then _G.spyESPList={} end
-        local function clearESP()
-            for _,esp in pairs(_G.spyESPList)do
-                if esp and esp.Parent then esp:Destroy() end
-            end
-            _G.spyESPList={}
-        end
-        if not v then clearESP()return end
-        task.spawn(function()
-            while _G.spyESP do
-                for spy,esp in pairs(_G.spyESPList)do
-                    if not spy.Parent then esp:Destroy()_G.spyESPList[spy]=nil end
-                end
-                for _,spyModel in ipairs(workspace:FindFirstChild("enemies")and workspace.enemies:GetChildren()or{})do
-                    if spyModel:FindFirstChild("Head")and not _G.spyESPList[spyModel]then
-                        local billboard=Instance.new("BillboardGui")
-                        billboard.Adornee=spyModel.Head
-                        billboard.Size=UDim2.new(0,200,0,50)
-                        billboard.StudsOffset=Vector3.new(0,2,0)
-                        billboard.AlwaysOnTop=true
-                        local label=Instance.new("TextLabel")
-                        label.Size=UDim2.new(1,0,1,0)
-                        label.BackgroundTransparency=1
-                        label.Text="SPY"
-                        label.TextColor3=Color3.fromRGB(255,0,0)
-                        label.TextStrokeTransparency=0
-                        label.TextScaled=true
-                        label.Font=Enum.Font.GothamBold
-                        label.Parent=billboard
-                        billboard.Parent=spyModel.Head
-                        _G.spyESPList[spyModel]=billboard
-                    end
-                end
-                task.wait(0.2)
-            end
-            clearESP()
-        end)
-    end
+text="esp spy",
+state=false,
+callback=function(v)
+_G.se=v
+if not _G.sl then _G.sl={} end
+local function clr()
+for _,e in pairs(_G.sl)do
+if e and e.Parent then e:Destroy() end
+end
+_G.sl={}
+end
+if not v then clr()return end
+task.spawn(function()
+while _G.se do
+for m,e in pairs(_G.sl)do
+if not m.Parent then e:Destroy()_G.sl[m]=nil end
+end
+for _,m in ipairs(workspace:FindFirstChild("enemies")and workspace.enemies:GetChildren()or{})do
+if m:FindFirstChild("Head")and not _G.sl[m]then
+local g=Instance.new("BillboardGui")
+g.Adornee=m.Head
+g.Size=UDim2.new(0,200,0,50)
+g.StudsOffset=Vector3.new(0,2,0)
+g.AlwaysOnTop=true
+local l=Instance.new("TextLabel")
+l.Size=UDim2.new(1,0,1,0)
+l.BackgroundTransparency=1
+l.Text="SPY"
+l.TextColor3=Color3.fromRGB(255,0,0)
+l.TextStrokeTransparency=0
+l.TextScaled=true
+l.Font=Enum.Font.GothamBold
+l.Parent=g
+g.Parent=m.Head
+_G.sl[m]=g
+end
+end
+task.wait(0.2)
+end
+clr()
+end)
+end
+end
 })
 
 t:AddToggle({
-    text="auto farm cordage",
-    state=false,
-    callback=function(v)
-        _G.aflax=v
-        if v then
-            task.spawn(function()
-                local h=lp.Character:WaitForChild("HumanoidRootPart")
-                while _G.aflax do
-                    for _,plant in pairs(workspace.harvest:GetChildren())do
-                        if not _G.aflax then break end
-                        if plant.Name:lower()=="flax"then
-                            local bp=plant:FindFirstChildWhichIsA("BasePart")
-                            if bp then
-                                h.CFrame=bp.CFrame+Vector3.new(0,2,0)
-                                task.wait(0.1)
-                                for _,o in pairs(plant:GetDescendants())do
-                                    if o:IsA("ProximityPrompt")then fireproximityprompt(o)end
-                                end
-                            end
-                        end
-                    end
-                    task.wait()
-                end
-            end)
-        end
-    end
+text="auto farm cordage",
+state=false,
+callback=function(v)
+_G.af=v
+if v then
+task.spawn(function()
+local h=lp.Character:WaitForChild("HumanoidRootPart")
+while _G.af do
+for _,p in pairs(workspace.harvest:GetChildren())do
+if not _G.af then break end
+if p.Name:lower()=="flax"then
+local bp=p:FindFirstChildWhichIsA("BasePart")
+if bp then
+h.CFrame=bp.CFrame+Vector3.new(0,2,0)
+task.wait(0.1)
+for _,o in pairs(p:GetDescendants())do
+if o:IsA("ProximityPrompt")then fireproximityprompt(o)end
+end
+end
+end
+end
+task.wait()
+end
+end)
+end
+end
 })
 
 t:AddToggle({
-    text="active proximity prompts",
-    state=false,
-    callback=function(v)
-        _G.app=v
-        if v then
-            task.spawn(function()
-                local h=lp.Character:WaitForChild("HumanoidRootPart")
-                while _G.app do
-                    for _,o in pairs(workspace:GetDescendants())do
-                        if o:IsA("ProximityPrompt")and o.Parent:IsA("BasePart")and(h.Position-o.Parent.Position).Magnitude<15 then
-                            fireproximityprompt(o)
-                        end
-                    end
-                    task.wait(0.05)
-                end
-            end)
-        end
-    end
+text="active proximity prompts",
+state=false,
+callback=function(v)
+_G.ap=v
+if v then
+task.spawn(function()
+local h=lp.Character:WaitForChild("HumanoidRootPart")
+while _G.ap do
+for _,o in pairs(workspace:GetDescendants())do
+if o:IsA("ProximityPrompt")and o.Parent:IsA("BasePart")and(h.Position-o.Parent.Position).Magnitude<15 then
+fireproximityprompt(o)
+end
+end
+task.wait(0.05)
+end
+end)
+end
+end
 })
 
 t:AddToggle({
-    text="auto fish(buggy as hell cuz old method got patched)",
-    state=false,
-    callback=function(v)
-        _G.autofish=v
-        if v then
-            task.spawn(function()
-               
-                task.spawn(function()
-                    while _G.autofish and task.wait(0.01) do
-                        game:GetService("ReplicatedStorage").remotes.fish_point:FireServer(true)
-                    end
-                end)
-                
-                task.spawn(function()
-                    local remotes=game:GetService("ReplicatedStorage"):WaitForChild("remotes")
-                    local castRemote=remotes:WaitForChild("cast")
-                    while _G.autofish do
-                        local char=lp.Character or lp.CharacterAdded:Wait()
-                        local hrp=char:WaitForChild("HumanoidRootPart")
-                        local forwardVector=hrp.CFrame.LookVector
-                        local targetPos=hrp.Position+(forwardVector*50)
-                        pcall(function()
-                            castRemote:FireServer(targetPos)
-                        end)
-                        task.wait(0.5)
-                    end
-                end)
-            end)
-        end
-    end
+text="auto fish",
+state=false,
+callback=function(v)
+_G.afs=v
+if v then
+task.spawn(function()
+task.spawn(function()
+while _G.afs and task.wait(0.01)do
+game:GetService("ReplicatedStorage").remotes.fish_point:FireServer(true)
+end
+end)
+task.spawn(function()
+local rs=game:GetService("ReplicatedStorage"):WaitForChild("remotes")
+local cs=rs:WaitForChild("cast")
+while _G.afs do
+local ch=lp.Character or lp.CharacterAdded:Wait()
+local h=ch:WaitForChild("HumanoidRootPart")
+local f=h.CFrame.LookVector
+local tp=h.Position+(f*50)
+pcall(function()
+cs:FireServer(tp)
+end)
+task.wait(0.5)
+end
+end)
+end)
+end
+end
 })
 
 b:AddButton({
-    text="teleport to spawn",
-    callback=function()
-        local spawn=workspace:FindFirstChild("SpawnLocation")
-        if spawn and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")then
-            lp.Character.HumanoidRootPart.CFrame=spawn.CFrame
-        end
-    end
+text="teleport to spawn",
+callback=function()
+local s=workspace:FindFirstChild("SpawnLocation")
+if s and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")then
+lp.Character.HumanoidRootPart.CFrame=s.CFrame
+end
+end
 })
 
 b:AddButton({
-    text="fly gui",
-    callback=function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()
-    end
+text="fly gui",
+callback=function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()
+end
 })
 
 b:AddButton({
-    text="teleport to heli crash",
-    callback=function()
-        local h=lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-        if not h then return end
-        for _,heli in pairs(workspace:WaitForChild("interact"):GetChildren())do
-            if heli.Name=="heli_crash"and heli:FindFirstChild("Body")then
-                local bp=heli.Body:FindFirstChildWhichIsA("BasePart")
-                if bp then
-                    h.CFrame=bp.CFrame+Vector3.new(0,3,0)
-                    break
-                end
-            end
-        end
-    end
+text="teleport to heli crash",
+callback=function()
+local h=lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+if not h then return end
+for _,x in pairs(workspace:WaitForChild("interact"):GetChildren())do
+if x.Name=="heli_crash"and x:FindFirstChild("Body")then
+local bp=x.Body:FindFirstChildWhichIsA("BasePart")
+if bp then
+h.CFrame=bp.CFrame+Vector3.new(0,3,0)
+break
+end
+end
+end
+end
 })
 
 b:AddLabel({text="Made by Pall(@opalbetus)"})
