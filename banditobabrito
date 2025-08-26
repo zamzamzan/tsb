@@ -1,0 +1,213 @@
+local p = game.Players.LocalPlayer
+local rs = game:GetService("ReplicatedStorage")
+
+local buy = rs.Events.Client.Stock.BuyRequest
+local sell = rs.Events.Client.Sell.SellRequest
+local reb = rs.Events.Client.Rebirth.RequestRebirth
+
+local L = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local w = L:CreateWindow({
+    Name = "Hire a fisher",
+    LoadingTitle = "Cappuccino assassino",
+    LoadingSubtitle = "by opalbetus",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "AutoShopCollector",
+        FileName = "Config"
+    },
+})
+
+local t = w:CreateTab("Main", 4483362458)
+t:CreateSection("Auto Buy")
+t:CreateSection("Auto Collect / Sell / Rebirth")
+
+local it = {
+    {Name = "Rod Rookie", Display = "Rod Rookie - $30"},
+    {Name = "Bucket Buddy", Display = "Bucket Buddy - $100"},
+    {Name = "Pier Jig Pair", Display = "Pier Jig Pair - $700"},
+    {Name = "Sand Spike Sam", Display = "Sand Spike Sam - $1,500"},
+    {Name = "Net Caster Ava", Display = "Net Caster Ava - $4,500"},
+    {Name = "The Cousin", Display = "The Cousin - $12,500"},
+    {Name = "Tote Boat Theo", Display = "Tote Boat Theo - $27,500"},
+    {Name = "Gnomes", Display = "Gnomes - $50,000"},
+    {Name = "Kayak Guys", Display = "Kayak Guys - $100,000"},
+    {Name = "Net Caster Tom", Display = "Net Caster Tom - $175,000"},
+    {Name = "Viking Fisher", Display = "Viking Fisher - $375,000"},
+    {Name = "Catamaran Caster", Display = "Catamaran Caster - $750,000"},
+    {Name = "Spear Fisher Dax", Display = "Spear Fisher Dax - $13,000,000"},
+    {Name = "Bait Drone", Display = "Bait Drone - $27,000,000"},
+    {Name = "The Blue Tide", Display = "The Blue Tide - $180,000,000"},
+    {Name = "Photon Net Grappler", Display = "Photon Net Grappler - $360,000,000"},
+    {Name = "Quantum Net Drone", Display = "Quantum Net Drone - $750,000,000"},
+}
+
+local opts = {}
+for _, v in ipairs(it) do
+    table.insert(opts, v.Display)
+end
+
+local sel = {}
+
+t:CreateDropdown({
+    Name = "Choose Items to Auto Buy",
+    Options = opts,
+    MultipleOptions = true,
+    CurrentOption = {},
+    Flag = "sel",
+    Callback = function(o)
+        sel = {}
+        for _, d in ipairs(o) do
+            for _, v in ipairs(it) do
+                if v.Display == d then
+                    table.insert(sel, v.Name)
+                end
+            end
+        end
+        L:Notify({Title = "Auto Buy", Content = "Updated selected items ("..#sel..")", Duration = 3})
+    end,
+})
+
+_G.ab = false
+t:CreateToggle({
+    Name = "Auto buy the fisher thingy",
+    CurrentValue = false,
+    Flag = "ab",
+    Callback = function(v)
+        _G.ab = v
+        task.spawn(function()
+            while _G.ab do
+                if #sel == 0 then
+                    task.wait(1)
+                else
+                    for _, n in ipairs(sel) do
+                        local ok, r = pcall(function() return buy:InvokeServer(n) end)
+                        if ok and r then
+                            task.wait(0.3)
+                        else
+                            task.wait(2)
+                        end
+                    end
+                    task.wait(1)
+                end
+            end
+        end)
+    end,
+})
+
+_G.ac = false
+t:CreateToggle({
+    Name = "Aura collect fish from fisher",
+    CurrentValue = false,
+    Flag = "ac",
+    Callback = function(v)
+        _G.ac = v
+        task.spawn(function()
+            while _G.ac do
+                for _, pl in pairs(workspace.Plots:GetChildren()) do
+                    if pl:FindFirstChild("Generators") then
+                        for _, g in pairs(pl.Generators:GetChildren()) do
+                            local pr = g:FindFirstChild("CollectPrompt")
+                            if pr then
+                                pcall(function() fireproximityprompt(pr) end)
+                            end
+                        end
+                    end
+                end
+                task.wait(0.3)
+            end
+        end)
+    end,
+})
+
+local pos = Vector3.new(137, 4, 9)
+
+_G.as = false
+t:CreateToggle({
+    Name = "Auto sell (sell every 60s)",
+    CurrentValue = false,
+    Flag = "as",
+    Callback = function(v)
+        _G.as = v
+        task.spawn(function()
+            while _G.as do
+                local c = p.Character
+                if c and c:FindFirstChild("HumanoidRootPart") then
+                    local r = c.HumanoidRootPart
+                    local old = r.CFrame
+                    r.CFrame = CFrame.new(pos)
+                    task.wait(0.5)
+                    pcall(function() sell:InvokeServer(true) end)
+                    task.wait(0.5)
+                    r.CFrame = old
+                end
+                task.wait(60)
+            end
+        end)
+    end,
+})
+
+_G.ar = false
+t:CreateToggle({
+    Name = "Auto rebirth (only works when u can rebirth)",
+    CurrentValue = false,
+    Flag = "ar",
+    Callback = function(v)
+        _G.ar = v
+        task.spawn(function()
+            while _G.ar do
+                pcall(function() reb:FireServer() end)
+                task.wait(60)
+            end
+        end)
+    end,
+})
+
+t:CreateButton({
+    Name = "Buy selected fiser once",
+    Callback = function()
+        if #sel == 0 then
+            L:Notify({Title="Buy Once", Content="No items selected", Duration=3})
+            return
+        end
+        for _, v in ipairs(sel) do
+            local ok, r = pcall(function() return buy:InvokeServer(v) end)
+            if ok and r then
+                L:Notify({Title="Buy Once", Content="Bought "..v, Duration=2})
+            else
+                L:Notify({Title="Buy Once", Content="Failed "..v, Duration=2})
+                task.wait(1)
+            end
+            task.wait(0.3)
+        end
+    end
+})
+
+t:CreateButton({
+    Name = "Sell Now (TP -> Sell -> Back)",
+    Callback = function()
+        local c = p.Character
+        if not (c and c:FindFirstChild("HumanoidRootPart")) then
+            L:Notify({Title="Sell Now", Content="No char", Duration=3})
+            return
+        end
+        local r = c.HumanoidRootPart
+        local ok, old = pcall(function() return r.CFrame end)
+        if not ok then return end
+        r.CFrame = CFrame.new(pos)
+        task.wait(0.5)
+        pcall(function() sell:InvokeServer(true) end)
+        task.wait(0.5)
+        r.CFrame = old
+        L:Notify({Title="Sell Now", Content="Sell attempted", Duration=2})
+    end
+})
+
+local ct = w:CreateTab("Credits", 4483362458)
+ct:CreateParagraph({Title = "made by pall(@opalbetus)", Content = "ass script"})
+ct:CreateButton({
+    Name = "Destroy Rayfield",
+    Callback = function()
+        L:Destroy()
+    end
+})
