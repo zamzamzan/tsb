@@ -19,7 +19,6 @@ local w = L:CreateWindow({
 })
 
 local t = w:CreateTab("Main", 4483362458)
-t:CreateSection("Auto Buy")
 t:CreateSection("Auto Collect / Sell / Rebirth")
 
 local it = {
@@ -50,7 +49,7 @@ end
 local sel = {}
 
 t:CreateDropdown({
-    Name = "Choose Items to Auto Buy",
+    Name = "Choose fisher to auto buy",
     Options = opts,
     MultipleOptions = true,
     CurrentOption = {},
