@@ -183,7 +183,7 @@ t:CreateButton({
 })
 
 t:CreateButton({
-    Name = "Sell Now (TP -> Sell -> Back)",
+    Name = "Sell all fish ",
     Callback = function()
         local c = p.Character
         if not (c and c:FindFirstChild("HumanoidRootPart")) then
