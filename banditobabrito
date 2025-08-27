@@ -36,6 +36,9 @@ local it={
 {Name="The Blue Tide",Display="The Blue Tide - $180,000,000"},
 {Name="Photon Net Grappler",Display="Photon Net Grappler - $360,000,000"},
 {Name="Quantum Net Drone",Display="Quantum Net Drone - $750,000,000"},
+{Name="Quantum Lure Pod",Display="Quantum Lure Pod - $2,000,000,000"},
+{Name="Cosmo Fish Abductor",Display="Cosmo Fish Abductor - $10,000,000,000"},
+{Name="AetherBit Lure Node",Display="AetherBit Lure Node - $25,000,000,000"},
 }
 
 local opts={}
