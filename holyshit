@@ -63,15 +63,14 @@ end
 
 k:CreateToggle({Name="ESP enemies",CurrentValue=false,Flag="a",Callback=function(L)
 if L then
-for ,C in ipairs(workspace.ActiveZombies:GetChildren())do v(C)end
+for _,C in ipairs(workspace.ActiveZombies:GetChildren())do v(C)end
 workspace.ActiveZombies.ChildAdded:Connect(v)
 workspace.ActiveZombies.ChildRemoved:Connect(y)
 else
-for C, in pairs(n)do y(C)end
+for C,_ in pairs(n)do y(C)end
 end
 end})
 
--- Melee Kill All
 k:CreateToggle({Name="Melee aura good for bosses",CurrentValue=false,Flag="b",Callback=function(L)
 if L then
 task.spawn(function()
@@ -93,7 +92,6 @@ end
 end)
 end
 end})
-
 
 k:CreateToggle({Name="Pick up dropped thingy like ammo refill",CurrentValue=false,Flag="c",Callback=function(L)
 if L then
@@ -124,7 +122,6 @@ end)
 end
 end})
 
-
 k:CreateToggle({Name="Camera aim to zombiee head",CurrentValue=false,Flag="d",Callback=function(L)
 if L then
 h.RenderStepped:Connect(function()
@@ -136,7 +133,7 @@ end
 end
 end)
 end
-end
+end})
 
 k:CreateButton({Name="Delete lava",Callback=function()
 local S=workspace:FindFirstChild("TouchLava")
@@ -169,7 +166,6 @@ end
 end
 end})
 
-
 l:CreateToggle({Name="Kill aura gun (buggy)",CurrentValue=false,Flag="e",Callback=function(L)
 if L then
 task.spawn(function()
@@ -200,5 +196,3 @@ end})
 l:CreateButton({Name="Teleport to pro serverr",Callback=function()
 b:Teleport(87558966821867,f)
 end})
-
-
