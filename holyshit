@@ -1,3 +1,4 @@
+
 local a=game:GetService("ReplicatedStorage")
 local b=game:GetService("TeleportService")
 local c=a:WaitForChild("Events")
@@ -11,151 +12,185 @@ local j=i:CreateWindow({Name="Tower of zombie",LoadingTitle="ballerina cappucinn
 local k=j:CreateTab("Main",4483362458)
 local l=j:CreateTab("Misc",4483362458)
 local m,n,o,p,q={},false,false,false,false
-local r
+local r,ac,kat,mt,pt
 
 local function s()
-local t=f.Character
-if t then for _,u in ipairs(t:GetChildren())do if u:IsA("Tool")then return u.Name end end end
-return"Makarov"
+ local t=f.Character
+ if t then for _,u in ipairs(t:GetChildren())do if u:IsA("Tool")then return u.Name end end end
+ return"Makarov"
 end
 
 local function v(w)
-if m[w]then return end
-local x=Instance.new("Highlight")
-x.Adornee=w
-x.FillColor=Color3.fromRGB(255,0,0)
-x.OutlineColor=Color3.fromRGB(255,255,255)
-x.FillTransparency=0.5
-x.Parent=w
-m[w]=x
+ if m[w]then return end
+ local x=Instance.new("Highlight")
+ x.Adornee=w
+ x.FillColor=Color3.fromRGB(255,0,0)
+ x.OutlineColor=Color3.fromRGB(255,255,255)
+ x.FillTransparency=0.5
+ x.Parent=w
+ m[w]=x
 end
 
 local function y(w)
-if m[w]then m[w]:Destroy()m[w]=nil end
+ if m[w]then m[w]:Destroy() m[w]=nil end
 end
 
 local function z()
-local A,B=nil,math.huge
-for _,C in ipairs(workspace.ActiveZombies:GetChildren())do
-local D=C:FindFirstChild("Head")
-local E=C:FindFirstChild("Humanoid")
-if D and E and E.Health>0 then
-local F=(g.CFrame.Position-D.Position).Magnitude
-if F<B then A=C B=F end
-end end
-return A
+ local A,B=nil,math.huge
+ for _,C in ipairs(workspace.ActiveZombies:GetChildren())do
+  local D=C:FindFirstChild("Head")
+  local E=C:FindFirstChild("Humanoid")
+  if D and E and E.Health>0 then
+   local F=(g.CFrame.Position-D.Position).Magnitude
+   if F<B then A=C B=F end
+  end
+ end
+ return A
 end
 
 local function G()
-local t=f.Character
-if not t then return false end
-return t:FindFirstChildOfClass("Tool")~=nil
+ local t=f.Character
+ if not t then return false end
+ return t:FindFirstChildOfClass("Tool")~=nil
 end
 
 local function H(I)
-local J=(I-g.CFrame.Position).Unit
-g.CFrame=CFrame.new(g.CFrame.Position,g.CFrame.Position+J)
+ local J=(I-g.CFrame.Position).Unit
+ g.CFrame=CFrame.new(g.CFrame.Position,g.CFrame.Position+J)
 end
 
 k:CreateToggle({Name="ESP enemies",CurrentValue=false,Flag="a",Callback=function(L)
-if L then
-for _,C in ipairs(workspace.ActiveZombies:GetChildren())do v(C)end
-workspace.ActiveZombies.ChildAdded:Connect(v)
-workspace.ActiveZombies.ChildRemoved:Connect(y)
-else
-for C,_ in pairs(m)do y(C)end
-end
+ if L then
+  for _,C in ipairs(workspace.ActiveZombies:GetChildren())do v(C) end
+  workspace.ActiveZombies.ChildAdded:Connect(v)
+  workspace.ActiveZombies.ChildRemoved:Connect(y)
+ else
+  for C,_ in pairs(m)do y(C) end
+ end
 end})
 
 k:CreateToggle({Name="Melee aura good for bosses",CurrentValue=false,Flag="b",Callback=function(L)
-n=L
-if L then task.spawn(function()
-while n do
-local t=f.Character
-local M=t and t:FindFirstChild("HumanoidRootPart")
-if M then for N,C in ipairs(workspace.ActiveZombies:GetChildren())do
-if not n then break end
-local O=C:FindFirstChild("Head")or C:FindFirstChild("HumanoidRootPart")
-if O and(M.Position-O.Position).Magnitude<15 then pcall(function()e:FireServer()end)end
-if N%10==0 then task.wait(0.05)end end end
-task.wait(0.15)end end)end
+ n=L
+ if n then
+  mt=task.spawn(function()
+   while n do
+    local t=f.Character
+    local M=t and t:FindFirstChild("HumanoidRootPart")
+    if M then
+     for N,C in ipairs(workspace.ActiveZombies:GetChildren())do
+      if not n then break end
+      local O=C:FindFirstChild("Head")or C:FindFirstChild("HumanoidRootPart")
+      if O and (M.Position-O.Position).Magnitude<15 then pcall(function() e:FireServer() end) end
+      if N%10==0 then task.wait(0.05) end
+     end
+    end
+    task.wait(0.15)
+   end
+  end)
+ elseif mt then mt=nil end
 end})
 
 k:CreateToggle({Name="Pick up dropped thingy like ammo refill",CurrentValue=false,Flag="c",Callback=function(L)
-o=L
-if L then task.spawn(function()
-while o do
-local t=f.Character
-local M=t and t:FindFirstChild("HumanoidRootPart")
-local P=workspace:FindFirstChild("WeaponBlacklist")
-if M and P then for N,Q in ipairs(P:GetDescendants())do
-if not o then break end
-if Q:IsA("TouchTransmitter")then
-local R=Q.Parent
-if R and R:IsA("BasePart")then
-pcall(function()
-firetouchinterest(M,R,0)
-task.wait(0.05)
-firetouchinterest(M,R,1)
-end)end end
-if N%20==0 then task.wait(0.1)end end end
-task.wait(2)end end)end
+ o=L
+ if o then
+  pt=task.spawn(function()
+   while o do
+    local t=f.Character
+    local M=t and t:FindFirstChild("HumanoidRootPart")
+    local P=workspace:FindFirstChild("WeaponBlacklist")
+    if M and P then
+     for N,Q in ipairs(P:GetDescendants())do
+      if not o then break end
+      if Q:IsA("TouchTransmitter")then
+       local R=Q.Parent
+       if R and R:IsA("BasePart")then
+        pcall(function()
+         firetouchinterest(M,R,0)
+         task.wait(0.05)
+         firetouchinterest(M,R,1)
+        end)
+       end
+      end
+      if N%20==0 then task.wait(0.1) end
+     end
+    end
+    task.wait(2)
+   end
+  end)
+ elseif pt then pt=nil end
 end})
 
 k:CreateToggle({Name="Camera aim to zombiee head",CurrentValue=false,Flag="d",Callback=function(L)
-p=L
-if L then
-r=h.RenderStepped:Connect(function()
-if not p then r:Disconnect()return end
-if G()then local K=z()if K and K:FindFirstChild("Head")then H(K.Head.Position)end end
-end)
-elseif r then r:Disconnect()r=nil end
+ p=L
+ if p then
+  if not ac then
+   ac=h.RenderStepped:Connect(function()
+    if not p then return end
+    if G() then
+     local K=z()
+     if K and K:FindFirstChild("Head")then H(K.Head.Position) end
+    end
+   end)
+  end
+ elseif ac then ac:Disconnect() ac=nil end
 end})
 
 k:CreateButton({Name="Delete lava",Callback=function()
-local S=workspace:FindFirstChild("TouchLava")
-if S then S:Destroy()end
+ local S=workspace:FindFirstChild("TouchLava")
+ if S then S:Destroy() end
 end})
 
 k:CreateButton({Name="Delete barrier",Callback=function()
-local P=workspace:FindFirstChild("WeaponBlacklist")
-if P then for _,T in ipairs(P:GetChildren())do if T:FindFirstChild("InvisibleBarriers")then T:Destroy()end end end
+ local P=workspace:FindFirstChild("WeaponBlacklist")
+ if P then for _,T in ipairs(P:GetChildren())do if T:FindFirstChild("InvisibleBarriers")then T:Destroy() end end end
 end})
 
 k:CreateButton({Name="Unlock all chekpoint",Callback=function()
-local t=f.Character or f.CharacterAdded:Wait()
-local M=t:WaitForChild("HumanoidRootPart")
-for _,U in ipairs(workspace.Checkpoints:GetDescendants())do
-if U:IsA("TouchTransmitter")then
-local R=U.Parent
-if R and R:IsA("BasePart")then
-pcall(function()
-firetouchinterest(M,R,0)
-task.wait(0.15)
-firetouchinterest(M,R,1)
-end)end end end
+ local t=f.Character or f.CharacterAdded:Wait()
+ local M=t:WaitForChild("HumanoidRootPart")
+ for _,U in ipairs(workspace.Checkpoints:GetDescendants())do
+  if U:IsA("TouchTransmitter")then
+   local R=U.Parent
+   if R and R:IsA("BasePart")then
+    pcall(function()
+     firetouchinterest(M,R,0)
+     task.wait(0.15)
+     firetouchinterest(M,R,1)
+    end)
+   end
+  end
+ end
 end})
 
-l:CreateToggle({Name="Kill aura gun (buggy)",CurrentValue=false,Flag="e",Callback=function(L)
-q=L
-if L then task.spawn(function()
-while q do
-local t=f.Character
-local M=t and t:FindFirstChild("HumanoidRootPart")
-local V=s()
-if M and V then for _,C in ipairs(workspace.ActiveZombies:GetChildren())do
-local E=C:FindFirstChild("Humanoid")
-local D=C:FindFirstChild("Head")
-if E and E.Health>0 and D then
-local F=(M.Position-D.Position).Magnitude
-if F<100 then pcall(function()d:FireServer(V,{{D}},{{V,nil,nil,nil,true,D,false,false}})end)end end end end
-task.wait(0.15)end end)end
+l:CreateToggle({Name="Kill aura gun",CurrentValue=false,Flag="e",Callback=function(L)
+ q=L
+ if q then
+  kat=task.spawn(function()
+   while q do
+    local t=f.Character
+    local M=t and t:FindFirstChild("HumanoidRootPart")
+    local V=s()
+    if M and V then
+     for _,C in ipairs(workspace.ActiveZombies:GetChildren())do
+      if not q then break end
+      local E=C:FindFirstChild("Humanoid")
+      local D=C:FindFirstChild("Head")
+      if E and E.Health>0 and D then
+       local F=(M.Position-D.Position).Magnitude
+       if F<100 then pcall(function() d:FireServer(V,{{D}},{{V,nil,nil,nil,true,D,false,false}}) end) end
+      end
+     end
+    end
+    task.wait(0.15)
+   end
+  end)
+ elseif kat then kat=nil end
 end})
 
 l:CreateButton({Name="Teleport to pro serverr",Callback=function()
-b:Teleport(87558966821867,f)
+ b:Teleport(87558966821867,f)
 end})
 
 l:CreateButton({Name="fly gui or ui idk",Callback=function()
-loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()
+ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()
 end})
