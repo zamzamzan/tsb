@@ -1,3 +1,4 @@
+-- hi skid
 
 local a=game:GetService("ReplicatedStorage")
 local b=game:GetService("TeleportService")
