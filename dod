@@ -175,9 +175,26 @@ misc:CreateButton({
 misc:CreateButton({
     Name="destroy rayfiel",
     Callback=function()
-        if unld then return end;unld=true;Store:ClearAllChildren()
-        for _,cc in pairs(con)do for _,v in pairs(cc)do if typeof(v)=="RBXScriptConnection"then v:Disconnect()end end end
+        if unld then return end
+        unld=true
+        Store:ClearAllChildren()
+        for _,cc in pairs(con)do 
+            for _,v in pairs(cc)do 
+                if typeof(v)=="RBXScriptConnection"then 
+                    v:Disconnect()
+                end 
+            end 
+        end
         con={}
-        local g=CG:FindFirstChild("Rayfield")if g then g:Destroy()end
+        local g=CG:FindFirstChild("Rayfield")
+        if g then g:Destroy()end
+    end
+})
+
+local p=W:CreateTab("sigma",4483362458)
+p:CreateButton({
+    Name="copy discord link",
+    Callback=function()
+        setclipboard("https://discord.gg/TbK2NWqS5R")
     end
 })
