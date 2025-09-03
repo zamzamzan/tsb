@@ -82,7 +82,7 @@ local old=CG:FindFirstChild("Rayfield")if old then old:Destroy()end
 local ok,RF=pcall(function()return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()end)
 if not ok or not RF then RF={CreateWindow=function()return{CreateTab=function()return{CreateToggle=function()end,CreateSlider=function()end,CreateButton=function()end,CreateParagraph=function()return{Set=function()end}end,CreateDropdown=function()end}end}end}end
 
-local W=RF:CreateWindow({Name="HUB(Die of Death)",LoadingTitle="Loading...",LoadingSubtitle="by cutotoite_10",ConfigurationSaving={Enabled=false}})
+local W=RF:CreateWindow({Name="HUB(Die of Death)",LoadingTitle="Loading...",LoadingSubtitle="by handsome pall",ConfigurationSaving={Enabled=false}})
 
 for n,c in pairs(cfgs)do
     local t=W:CreateTab(n.." ESP",4483362458)
