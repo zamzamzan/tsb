@@ -1,162 +1,239 @@
-local Plrs=game:GetService("Players")
-local RS=game:GetService("RunService")
-local CG=game:GetService("CoreGui")
-local Rep=game:GetService("ReplicatedStorage")
-local WS=game:GetService("Workspace")
-local lp=Plrs.LocalPlayer
-local con,unld={},false
+--// Services
+local Plrs = game:GetService("Players")
+local RS = game:GetService("RunService")
+local CG = game:GetService("CoreGui")
+local Rep = game:GetService("ReplicatedStorage")
+local WS = game:GetService("Workspace")
+local lp = Plrs.LocalPlayer
+local con, unld = {}, false
 
-local Store=CG:FindFirstChild("H_Store")or Instance.new("Folder")
-Store.Name="H_Store";Store.Parent=CG
+--// Storage
+local Store = CG:FindFirstChild("H_Store") or Instance.new("Folder")
+Store.Name = "H_Store"
+Store.Parent = CG
 
-local cfgs={
-    Survivor={Enabled=true,Name=true,HP=true,Fill=true,Outline=true,FillColor=Color3.new(0,1,0),OutlineColor=Color3.new(0,1,0),FillTransparency=0.5,OutlineTransparency=0},
-    Killer={Enabled=true,Name=true,HP=true,Fill=true,Outline=true,FillColor=Color3.new(1,0,0),OutlineColor=Color3.new(1,0,0),FillTransparency=0.5,OutlineTransparency=0},
-    Ghost={Enabled=true,Name=true,HP=true,Fill=true,Outline=true,FillColor=Color3.new(0,1,1),OutlineColor=Color3.new(0,1,1),FillTransparency=0.5,OutlineTransparency=0}
+--// ESP Config
+local cfg = {
+    Enabled = false, -- starts OFF
+    Survivor = {
+        FillColor = Color3.new(0, 1, 0),
+        OutlineColor = Color3.new(0, 1, 0),
+    },
+    Killer = {
+        FillColor = Color3.new(1, 0, 0),
+        OutlineColor = Color3.new(1, 0, 0),
+    },
+    FillTransparency = 0.5,
+    OutlineTransparency = 0,
 }
-local DMode="AlwaysOnTop";local Stroke=Color3.new()
+local DMode = "AlwaysOnTop"
+local Stroke = Color3.new()
 
-local function lbl(n,p,y)
-    local l=Instance.new("TextLabel")
-    l.Name=n;l.Parent=p;l.BackgroundTransparency=1
-    l.Size=UDim2.new(1,0,.5,0);l.Position=UDim2.new(0,0,y,0)
-    l.TextSize=14;l.Font=Enum.Font.SourceSansBold
-    l.TextStrokeColor3=Stroke;l.TextStrokeTransparency=0
-    l.TextColor3=Color3.new(1,1,1);return l
+--// Helpers
+local function lbl(n, p, y)
+    local l = Instance.new("TextLabel")
+    l.Name = n
+    l.Parent = p
+    l.BackgroundTransparency = 1
+    l.Size = UDim2.new(1, 0, .5, 0)
+    l.Position = UDim2.new(0, 0, y, 0)
+    l.TextSize = 14
+    l.Font = Enum.Font.SourceSansBold
+    l.TextStrokeColor3 = Stroke
+    l.TextStrokeTransparency = 0
+    l.TextColor3 = Color3.new(1, 1, 1)
+    return l
 end
 
-local function hpdisp(pl,h,lb,c)
+local function hpdisp(pl, h, lb)
     local function u(v)
-        if c.HP and c.Enabled then lb.Visible=true;lb.Text=("HP: %d/%d"):format(v,h.MaxHealth) else lb.Visible=false end
+        if cfg.Enabled then
+            lb.Visible = true
+            lb.Text = ("HP: %d/%d"):format(v, h.MaxHealth)
+        else
+            lb.Visible = false
+        end
     end
     u(h.Health)
-    if con[pl]and con[pl].H then con[pl].H:Disconnect()end
-    con[pl].H=h.HealthChanged:Connect(u)
+    if con[pl] and con[pl].H then con[pl].H:Disconnect() end
+    con[pl].H = h.HealthChanged:Connect(u)
 end
 
-local function esp(pl,ch)
-    if not ch or pl==lp or unld then return end
-    local h=ch:FindFirstChild("Humanoid")
-    local hrp=ch:FindFirstChild("HumanoidRootPart")
-    local t=ch.Parent and ch.Parent.Name
-    local c=cfgs[t]
-    if not c or not h then return end
-    local hi=Store:FindFirstChild(pl.Name.."_H")
-    if not hi then hi=Instance.new("Highlight");hi.Name=pl.Name.."_H";hi.DepthMode=DMode;hi.Parent=Store end
-    hi.Adornee=ch;hi.Enabled=c.Enabled
-    hi.FillColor=c.FillColor;hi.OutlineColor=c.OutlineColor
-    hi.FillTransparency=c.Fill and c.FillTransparency or 1
-    hi.OutlineTransparency=c.Outline and c.OutlineTransparency or 1
+local function esp(pl, ch)
+    if not ch or pl == lp or unld or not cfg.Enabled then return end
+    local h = ch:FindFirstChild("Humanoid")
+    local hrp = ch:FindFirstChild("HumanoidRootPart")
+    local t = ch.Parent and ch.Parent.Name
+    if not h or (t ~= "Survivor" and t ~= "Killer") then return end
+
+    local col = (t == "Killer") and cfg.Killer or cfg.Survivor
+    local hi = Store:FindFirstChild(pl.Name.."_H")
+    if not hi then
+        hi = Instance.new("Highlight")
+        hi.Name = pl.Name.."_H"
+        hi.DepthMode = DMode
+        hi.Parent = Store
+    end
+
+    hi.Adornee = ch
+    hi.Enabled = cfg.Enabled
+    hi.FillColor = col.FillColor
+    hi.OutlineColor = col.OutlineColor
+    hi.FillTransparency = cfg.Enabled and cfg.FillTransparency or 1
+    hi.OutlineTransparency = cfg.Enabled and cfg.OutlineTransparency or 1
+
     if hrp then
-        local tag=Store:FindFirstChild(pl.Name.."_N")
+        local tag = Store:FindFirstChild(pl.Name.."_N")
         if not tag then
-            tag=Instance.new("BillboardGui")
-            tag.Name=pl.Name.."_N";tag.Size=UDim2.new(0,100,0,40)
-            tag.StudsOffset=Vector3.new(0,2.5,0);tag.AlwaysOnTop=true
-            tag.Parent=Store;lbl("PN",tag,0).Text=pl.Name;lbl("HP",tag,.5)
+            tag = Instance.new("BillboardGui")
+            tag.Name = pl.Name.."_N"
+            tag.Size = UDim2.new(0, 100, 0, 40)
+            tag.StudsOffset = Vector3.new(0, 2.5, 0)
+            tag.AlwaysOnTop = true
+            tag.Parent = Store
+            lbl("PN", tag, 0).Text = pl.Name
+            lbl("HP", tag, .5)
         end
-        tag.Adornee=hrp;tag.Enabled=c.Enabled
-        local n=tag:FindFirstChild("PN");local hp=tag:FindFirstChild("HP")
-        if n then n.Visible=c.Enabled and c.Name;n.TextColor3=c.FillColor end
-        if hp then hpdisp(pl,h,hp,c) end
+        tag.Adornee = hrp
+        tag.Enabled = cfg.Enabled
+        local n = tag:FindFirstChild("PN")
+        local hp = tag:FindFirstChild("HP")
+        if n then n.Visible = cfg.Enabled; n.TextColor3 = col.FillColor end
+        if hp then hpdisp(pl, h, hp) end
     end
 end
 
 local function add(pl)
-    if pl==lp then return end
-    con[pl]={C=pl.CharacterAdded:Connect(function(ch)task.wait(1)esp(pl,ch)end)}
-    if pl.Character then esp(pl,pl.Character) end
+    if pl == lp then return end
+    con[pl] = {C = pl.CharacterAdded:Connect(function(ch) task.wait(1) esp(pl, ch) end)}
+    if pl.Character then esp(pl, pl.Character) end
 end
 
 local function rem(pl)
-    for _,s in ipairs({"_H","_N"})do local o=Store:FindFirstChild(pl.Name..s)if o then o:Destroy()end end
-    if con[pl]then for _,v in pairs(con[pl])do if typeof(v)=="RBXScriptConnection"then v:Disconnect()end end con[pl]=nil end
+    for _, s in ipairs({"_H", "_N"}) do
+        local o = Store:FindFirstChild(pl.Name..s)
+        if o then o:Destroy() end
+    end
+    if con[pl] then
+        for _, v in pairs(con[pl]) do if typeof(v) == "RBXScriptConnection" then v:Disconnect() end end
+        con[pl] = nil
+    end
 end
 
 Plrs.PlayerAdded:Connect(add)
 Plrs.PlayerRemoving:Connect(rem)
-for _,v in ipairs(Plrs:GetPlayers())do add(v)end
-task.spawn(function()while task.wait(1)and not unld do for _,v in ipairs(Plrs:GetPlayers())do if v~=lp and v.Character then esp(v,v.Character)end end end end)
+for _, v in ipairs(Plrs:GetPlayers()) do add(v) end
 
-local old=CG:FindFirstChild("Rayfield")if old then old:Destroy()end
-local ok,RF=pcall(function()return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()end)
-if not ok or not RF then RF={CreateWindow=function()return{CreateTab=function()return{CreateToggle=function()end,CreateSlider=function()end,CreateButton=function()end,CreateParagraph=function()return{Set=function()end}end,CreateDropdown=function()end}end}end}end
-
-local W=RF:CreateWindow({Name="HUB(Die of Death)",LoadingTitle="Loading...",LoadingSubtitle="by handsome pall",ConfigurationSaving={Enabled=false}})
-
-for n,c in pairs(cfgs)do
-    local t=W:CreateTab(n.." ESP",4483362458)
-    t:CreateToggle({Name="Enable ESP",CurrentValue=c.Enabled,Callback=function(v)c.Enabled=v end})
-    t:CreateToggle({Name="Show Name",CurrentValue=c.Name,Callback=function(v)c.Name=v end})
-    t:CreateToggle({Name="Show HP",CurrentValue=c.HP,Callback=function(v)c.HP=v end})
-    t:CreateToggle({Name="Show Fill",CurrentValue=c.Fill,Callback=function(v)c.Fill=v end})
-    t:CreateColorPicker({Name="Fill Color",Color=c.FillColor,Callback=function(v)c.FillColor=v end})
-    t:CreateSlider({Name="Fill Transparency",Range={0,1},Increment=0.05,CurrentValue=c.FillTransparency,Callback=function(v)c.FillTransparency=v end})
-    t:CreateToggle({Name="Show Outline",CurrentValue=c.Outline,Callback=function(v)c.Outline=v end})
-    t:CreateColorPicker({Name="Outline Color",Color=c.OutlineColor,Callback=function(v)c.OutlineColor=v end})
-    t:CreateSlider({Name="Outline Transparency",Range={0,1},Increment=0.05,CurrentValue=c.OutlineTransparency,Callback=function(v)c.OutlineTransparency=v end})
-end
-
-local ch=lp.Character or lp.CharacterAdded:Wait()
-if not ch:GetAttribute("WalkSpeed")then ch:SetAttribute("WalkSpeed",10)end
-if not ch:GetAttribute("SprintSpeed")then ch:SetAttribute("SprintSpeed",27)end
-local ws=ch:GetAttribute("WalkSpeed");local ss=ch:GetAttribute("SprintSpeed")
-local wsen=false;local ssen=false
-local sp=W:CreateTab("Speed",4483362458)
-sp:CreateSlider({Name="WalkSpeed",Range={8,200},Increment=1,CurrentValue=ws,Callback=function(v)ws=v end})
-sp:CreateToggle({Name="Enable WalkSpeed",CurrentValue=wsen,Callback=function(v)wsen=v;if not v then ch:SetAttribute("WalkSpeed",10)end end})
-sp:CreateSlider({Name="SprintSpeed",Range={16,300},Increment=1,CurrentValue=ss,Callback=function(v)ss=v end})
-sp:CreateToggle({Name="Enable Sprint",CurrentValue=ssen,Callback=function(v)ssen=v;if not v then ch:SetAttribute("SprintSpeed",27)end end})
-RS.RenderStepped:Connect(function()if not ch then return end if wsen and ch:GetAttribute("WalkSpeed")~=ws then ch:SetAttribute("WalkSpeed",ws)end if ssen and ch:GetAttribute("SprintSpeed")~=ss then ch:SetAttribute("SprintSpeed",ss)end end)
-lp.CharacterAdded:Connect(function(c)ch=c;if not c:GetAttribute("WalkSpeed")then c:SetAttribute("WalkSpeed",ws)end;if not c:GetAttribute("SprintSpeed")then c:SetAttribute("SprintSpeed",ss)end end)
-
-local ab=false;local dist=15
-local use=Rep:WaitForChild("Events"):WaitForChild("RemoteFunctions"):WaitForChild("UseAbility")
-local tb=W:CreateTab("Block",4483362458)
-local log=tb:CreateParagraph({Title="Log",Content="None"})
-tb:CreateToggle({Name="Enable Auto Block",CurrentValue=ab,Callback=function(v)ab=v end})
-tb:CreateSlider({Name="Distance",Range={5,50},Increment=1,CurrentValue=dist,Callback=function(v)dist=v end})
-RS.Heartbeat:Connect(function()
-    if unld or not ab or not lp.Character or not lp.Character:FindFirstChild("HumanoidRootPart")then return end
-    local p=lp.Character.HumanoidRootPart.Position
-    for _,pl in pairs(Plrs:GetPlayers())do
-        if pl~=lp and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart")then
-            local t=pl.Character.Parent and pl.Character.Parent.Name
-            if t=="Killer"then local d=(pl.Character.HumanoidRootPart.Position-p).Magnitude;if d<=dist then pcall(function()use:InvokeServer("Block")end)log:Set({Content="Blocked "..pl.Name.."("..math.floor(d)..")"})end end
+task.spawn(function()
+    while task.wait(1) and not unld do
+        for _, v in ipairs(Plrs:GetPlayers()) do
+            if v ~= lp and v.Character then esp(v, v.Character) end
         end
     end
 end)
 
-local pp=true
-local ts=W:CreateTab("Settings",4483362458)
-ts:CreateToggle({Name="Instant PP",CurrentValue=pp,Callback=function(v)pp=v;for _,o in ipairs(WS:GetDescendants())do if o:IsA("ProximityPrompt")then if pp then o.HoldDuration=0 else o.HoldDuration=o:GetAttribute("OHD")or 1 end end end end})
-WS.DescendantAdded:Connect(function(o)if o:IsA("ProximityPrompt")then if not o:GetAttribute("OHD")then o:SetAttribute("OHD",o.HoldDuration)end if pp then o.HoldDuration=0 end end end)
+--// Rayfield
+local old = CG:FindFirstChild("Rayfield") if old then old:Destroy() end
+local ok, RF = pcall(function() return loadstring(game:HttpGet("https://sirius.menu/rayfield"))() end)
+if not ok or not RF then
+    RF = {CreateWindow = function() return {CreateTab = function() return {
+        CreateToggle = function() end,
+        CreateSlider = function() end,
+        CreateButton = function() end,
+        CreateParagraph = function() return {Set=function()end} end,
+        CreateDropdown = function() end,
+        CreateColorPicker = function() end
+    } end} end}
+end
 
-local tsk=W:CreateTab("Skills",4483362458)
-local sl={"Revolver","Punch","Block","Caretaker","Hotdog","Taunt","Cloak","Dash","Banana","BonusPad"}
-local s1,s2="Revolver","Caretaker"
-local par=tsk:CreateParagraph({Title="Selected",Content="Skill1:"..s1.."\nSkill2:"..s2})
-tsk:CreateDropdown({Name="Skill1",Options=sl,CurrentOption={s1},Callback=function(o)s1=o[1];par:Set({Content="Skill1:"..s1.."\nSkill2:"..s2})end})
-tsk:CreateDropdown({Name="Skill2",Options=sl,CurrentOption={s2},Callback=function(o)s2=o[1];par:Set({Content="Skill1:"..s1.."\nSkill2:"..s2})end})
-tsk:CreateButton({Name="Select",Callback=function()Rep:WaitForChild("Events"):WaitForChild("RemoteEvents"):WaitForChild("AbilitySelection"):FireServer({s1,s2})end})
-for _,n in ipairs(sl)do tsk:CreateButton({Name=n,Callback=function()pcall(function()use:InvokeServer(n)end)end})end
+local W = RF:CreateWindow({
+    Name = "HUB (Die of Death)",
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "by handsome pall",
+    ConfigurationSaving = {Enabled = false}
+})
 
-local tg=W:CreateTab("Gameplay",4483362458)
-local lws=true;local ist=true
-tg:CreateToggle({Name="LockWSM",CurrentValue=lws,Callback=function(v)lws=v end})
-tg:CreateToggle({Name="InfStam",CurrentValue=ist,Callback=function(v)ist=v end})
+--// ESP Tab (single toggle for all features)
+local espTab = W:CreateTab("ESP", 4483362458)
+espTab:CreateToggle({
+    Name = "Enable ESP (Name + HP + Fill + Outline)",
+    CurrentValue = cfg.Enabled,
+    Callback = function(v) cfg.Enabled = v end
+})
+
+--// Misc Tab
+local misc = W:CreateTab("Misc", 4483362458)
+
+-- instant proximity prompt
+local pp = true
+misc:CreateToggle({
+    Name = "Instant Proximity Prompt",
+    CurrentValue = pp,
+    Callback = function(v)
+        pp = v
+        for _, o in ipairs(WS:GetDescendants()) do
+            if o:IsA("ProximityPrompt") then
+                if not o:GetAttribute("OHD") then o:SetAttribute("OHD", o.HoldDuration) end
+                o.HoldDuration = pp and 0 or o:GetAttribute("OHD") or 1
+            end
+        end
+    end
+})
+WS.DescendantAdded:Connect(function(o)
+    if o:IsA("ProximityPrompt") then
+        if not o:GetAttribute("OHD") then o:SetAttribute("OHD", o.HoldDuration) end
+        if pp then o.HoldDuration = 0 end
+    end
+end)
+
+-- lock walk speed modifiers + infinite stamina
+local lws, ist = true, true
+misc:CreateToggle({Name="LockWSM",CurrentValue=lws,Callback=function(v) lws=v end})
+misc:CreateToggle({Name="Infinite Stamina",CurrentValue=ist,Callback=function(v) ist=v end})
+
 RS.Heartbeat:Connect(function()
     if unld then return end
-    local c=lp.Character;local h=c and c:FindFirstChildOfClass("Humanoid");if not h then return end
-    if lws then for _,o in pairs({h,c,lp})do if o and o:GetAttributes()then for n,v in pairs(o:GetAttributes())do if n:lower():find("walkspeedmodifier")and v<=0 then o:SetAttribute(n,0)end end end end end
-    if ist then for _,o in pairs({h,c,lp})do if o and o:GetAttributes()then for n,v in pairs(o:GetAttributes())do if n:lower():find("stamina")and v~=math.huge then o:SetAttribute(n,math.huge)end end end end end
+    local c = lp.Character
+    local h = c and c:FindFirstChildOfClass("Humanoid")
+    if not h then return end
+    if lws then
+        for _, o in pairs({h,c,lp}) do
+            if o and o.GetAttributes then
+                for n,v in pairs(o:GetAttributes()) do
+                    if n:lower():find("walkspeedmodifier") and v <= 0 then
+                        o:SetAttribute(n,0)
+                    end
+                end
+            end
+        end
+    end
+    if ist then
+        for _, o in pairs({h,c,lp}) do
+            if o and o.GetAttributes then
+                for n,v in pairs(o:GetAttributes()) do
+                    if n:lower():find("stamina") and v ~= math.huge then
+                        o:SetAttribute(n,math.huge)
+                    end
+                end
+            end
+        end
+    end
 end)
-lp.CharacterAdded:Connect(function(c)ch=c;local h=c:WaitForChild("Humanoid")if not c:GetAttribute("WalkSpeed")then c:SetAttribute("WalkSpeed",ws)end;if not c:GetAttribute("SprintSpeed")then c:SetAttribute("SprintSpeed",ss)end
-if lws then for _,o in pairs({h,c,lp})do if o and o:GetAttributes()then for n,v in pairs(o:GetAttributes())do if n:lower():find("walkspeedmodifier")and v<=0 then o:SetAttribute(n,0)end end end end end
-if ist then for _,o in pairs({h,c,lp})do if o and o:GetAttributes()then for n,v in pairs(o:GetAttributes())do if n:lower():find("stamina")and v~=math.huge then o:SetAttribute(n,math.huge)end end end end end end)
 
-ts:CreateButton({Name="Unload",Callback=function()
-    if unld then return end;unld=true;Store:ClearAllChildren()
-    for _,cc in pairs(con)do for _,v in pairs(cc)do if typeof(v)=="RBXScriptConnection"then v:Disconnect()end end end
-    con={};local g=CG:FindFirstChild("Rayfield")if g then g:Destroy()end
-end})
+-- delete rayfield button
+misc:CreateButton({
+    Name="Delete Rayfield",
+    Callback=function()
+        if unld then return end
+        unld = true
+        Store:ClearAllChildren()
+        for _,cc in pairs(con) do
+            for _,v in pairs(cc) do
+                if typeof(v)=="RBXScriptConnection" then v:Disconnect() end
+            end
+        end
+        con = {}
+        local g = CG:FindFirstChild("Rayfield")
+        if g then g:Destroy() end
+    end
+})
