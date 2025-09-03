@@ -103,14 +103,14 @@ local W=RF:CreateWindow({Name="Die of Death",LoadingTitle="hi",LoadingSubtitle="
 
 local espTab=W:CreateTab("ESP",4483362458)
 for n,c in pairs(cfgs)do
-    espTab:CreateToggle({Name=n.." ESP",CurrentValue=c.Enabled,Callback=function(v)c.Enabled=v end})
-    espTab:CreateColorPicker({Name=n.." Color",Color=c.Color,Callback=function(v)c.Color=v end})
+    espTab:CreateToggle({Name=n.." esp",CurrentValue=c.Enabled,Callback=function(v)c.Enabled=v end})
+    espTab:CreateColorPicker({Name=n.." color esp",Color=c.Color,Callback=function(v)c.Color=v end})
 end
 
 local misc=W:CreateTab("Misc",4483362458)
 local pp=false
 misc:CreateToggle({
-    Name="Instant PP",
+    Name="instant proximity prompt",
     CurrentValue=pp,
     Callback=function(v)
         pp=v
