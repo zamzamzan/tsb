@@ -1,0 +1,36 @@
+local a=game:GetService("Players")
+local b=game:GetService("ReplicatedStorage")
+local c=game:GetService("RunService")
+local d=game:GetService("Workspace")
+local e=a.LocalPlayer
+local f=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local g=f:CreateWindow({Name="Hades ESP & Generator Tester",LoadingTitle="ESP + Generator Test",LoadingSubtitle="By rasya"})
+task.wait(1.5)
+local h={Survivor={Color=Color3.fromRGB(0,255,255)},Killer={Color=Color3.fromRGB(255,0,0)},Hook={Color=Color3.fromRGB(255,105,180)},ExitLever={Color=Color3.fromRGB(0,255,0)},Generator={Color=Color3.fromRGB(255,165,0)}}
+local function i(j,k)if not j or not j:IsA("Model")then return end;if j:FindFirstChild("ESP_Highlight")then return end;local l=Instance.new("Highlight")l.Name="ESP_Highlight"l.FillColor=k l.OutlineColor=Color3.new(1,1,1)l.FillTransparency=0.5 l.OutlineTransparency=0 l.Parent=j end
+local function m(j)if j and j:FindFirstChild("ESP_Highlight")then j.ESP_Highlight:Destroy()end end
+local function n(j,o,p)if not e.Character or not e.Character:FindFirstChild("HumanoidRootPart")then return end;local q=e.Character.HumanoidRootPart;local r=j:FindFirstChildWhichIsA("BasePart")if not r then return end;local s=j:FindFirstChild("ESPLabel")if not s then s=Instance.new("BillboardGui")s.Name="ESPLabel"s.Size=UDim2.new(0,150,0,20)s.AlwaysOnTop=true s.StudsOffset=Vector3.new(0,3,0)s.Parent=j local t=Instance.new("TextLabel")t.Size=UDim2.new(1,0,1,0)t.BackgroundTransparency=1 t.TextColor3=p t.Font=Enum.Font.SourceSansBold t.TextScaled=true t.Name="Text"t.Parent=s end;local t=s:FindFirstChild("Text")if t then local u=(q.Position-r.Position).Magnitude t.Text=string.format("%s - %.0f studs",o,u)end end
+local function v(j)local w=j:FindFirstChild("ESPLabel")if w then w:Destroy()end end
+local function x(y)return y:FindFirstChild("Killerost")~=nil end
+local z={}
+local function A(B)if B==e then return end;local function C(D)if z[B]then z[B]:Disconnect()end;z[B]=c.Heartbeat:Connect(function()pcall(function()if not D or not D.Parent then return end;local E=x(D)if E and f.Flags["KillerESP"].CurrentValue then i(D,h.Killer.Color)n(D,"Killer",h.Killer.Color)elseif not E and f.Flags["SurvivorESP"].CurrentValue then i(D,h.Survivor.Color)n(D,"Survivor",h.Survivor.Color)else m(D)v(D)end end)end)end;if B.Character then C(B.Character)end;B.CharacterAdded:Connect(C)B:GetPropertyChangedSignal("Parent"):Connect(function()if not B.Parent and z[B]then z[B]:Disconnect()z[B]=nil end end)end
+for _,F in ipairs(a:GetPlayers())do A(F)end;a.PlayerAdded:Connect(A)
+local G=false
+local function H()local I=d:FindFirstChild("Map")if not I then return end;for _,J in ipairs(I:GetDescendants())do if J.Name:lower():find("generatorpoint")then local K=J.Parent;local L={"success",1,K,J}pcall(function()b.Remotes.Generator.SkillCheckResultEvent:FireServer(unpack(L))end)task.wait(0.05)end end end
+local M,N,O={}, {}, {}
+local function P()local Q=h.Hook.Color;local I=d:FindFirstChild("Map")if not I then return end;for _,J in ipairs(I:GetDescendants())do if J:IsA("Model")and J.Name:lower():find("hook")then i(J,Q)local R=c.Heartbeat:Connect(function()n(J,"Hook",Q)end)table.insert(M,R)end end end
+local function S()for _,R in ipairs(M)do R:Disconnect()end;M={}for _,J in ipairs(d:GetDescendants())do if J:IsA("Model")and J.Name:lower():find("hook")then m(J)v(J)end end end
+local function T()local U=h.ExitLever.Color;local I=d:FindFirstChild("Map")if not I then return end;if #I:GetChildren()>=226 then local V=I:GetChildren()[225]if V then local W=V:FindFirstChild("ExitLever")if W then i(W.Parent or W,U)local R=c.Heartbeat:Connect(function()n(W.Parent or W,"Exit",U)end)table.insert(N,R)end end end;for _,J in ipairs(I:GetDescendants())do if J.Name=="ExitLever"then i(J.Parent or J,U)local R=c.Heartbeat:Connect(function()n(J.Parent or J,"Exit",U)end)table.insert(N,R)end end end
+local function X()for _,R in ipairs(N)do R:Disconnect()end;N={}for _,J in ipairs(d:GetDescendants())do if J.Name=="ExitLever"then m(J.Parent or J)v(J.Parent or J)end end end
+local function Y()local Z=h.Generator.Color;local I=d:FindFirstChild("Map")if not I then return end;for _,J in ipairs(I:GetDescendants())do if J:IsA("Model")and(J.Name:lower():find("generator")or J.Name:lower():find("genpoint"))then if not J.Name:lower():find("hook")then i(J,Z)local R=c.Heartbeat:Connect(function()n(J,"Generator",Z)end)table.insert(O,R)end end end end
+local function _()for _,R in ipairs(O)do R:Disconnect()end;O={}for _,J in ipairs(d:GetDescendants())do if J:IsA("Model")and(J.Name:lower():find("generator")or J.Name:lower():find("genpoint"))then if not J.Name:lower():find("hook")then m(J)v(J)end end end end
+local a0=g:CreateTab("ESP")
+a0:CreateToggle({Name="Survivor ESP",CurrentValue=false,Flag="SurvivorESP",Callback=function(V)for _,B in ipairs(a:GetPlayers())do if B~=e and B.Character then if V and not x(B.Character)then i(B.Character,h.Survivor.Color)else m(B.Character)v(B.Character)end end end end})
+a0:CreateToggle({Name="Killer ESP",CurrentValue=false,Flag="KillerESP",Callback=function(V)for _,B in ipairs(a:GetPlayers())do if B~=e and B.Character then if V and x(B.Character)then i(B.Character,h.Killer.Color)else m(B.Character)v(B.Character)end end end end})
+a0:CreateToggle({Name="Hook ESP",CurrentValue=false,Flag="HookESP",Callback=function(V)if V then P()else S()end end})
+a0:CreateToggle({Name="Exit ESP",CurrentValue=false,Flag="ExitLeverESP",Callback=function(V)if V then T()else X()end end})
+a0:CreateToggle({Name="Generator ESP",CurrentValue=false,Flag="GeneratorESP",Callback=function(V)if V then Y()else _()end end})
+local a1=g:CreateTab("Generators")
+a1:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="AutoSkillLoop",Callback=function(V)G=V;if G then task.spawn(function()while G do H()task.wait(0.1)end end)end end})
+local function a2()G=false;for _,R in pairs(z)do R:Disconnect()end;z={}S()X()_()end
+game:GetService("UserInputService").WindowFocused:Connect(function()a2()end)
