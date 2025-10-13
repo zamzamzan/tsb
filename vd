@@ -1,6 +1,6 @@
 local P=game:GetService("Players")local W=game:GetService("Workspace")local R=game:GetService("RunService")local RS=game:GetService("ReplicatedStorage")local LP=P.LocalPlayer
 local RY=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-local WN=RY:CreateWindow({Name="Hades RNG - ESP",LoadingTitle="Loading ESP",LoadingSubtitle="by rasya",ConfigurationSaving={Enabled=true,FolderName="HadesRNG",FileName="ESP"}})
+local WN=RY:CreateWindow({Name="violence district",LoadingTitle="Loading peak script",LoadingSubtitle="by pall(@opalbetus)",ConfigurationSaving={Enabled=true,FolderName="sigma",FileName="ESP"}})
 local T1=WN:CreateTab("ESP",4483362458)local T2=WN:CreateTab("Misc",4483362458)
 local kE,sE,hE,gE,eE=false,false,false,false,false
 local cH,cL,lT,sI={}, {},0,1
