@@ -1,29 +1,60 @@
-local P=game:GetService("Players")local W=game:GetService("Workspace")local RS=game:GetService("ReplicatedStorage")local LP=P.LocalPlayer
+local P=game:GetService("Players")local W=game:GetService("Workspace")local R=game:GetService("RunService")local RS=game:GetService("ReplicatedStorage")local LP=P.LocalPlayer
 local RY=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local WN=RY:CreateWindow({Name="violence district",LoadingTitle="Loading peak script",LoadingSubtitle="by pall(@opalbetus)",ConfigurationSaving={Enabled=true,FolderName="sigma",FileName="ESP"}})
 local T1=WN:CreateTab("ESP",4483362458)local T2=WN:CreateTab("Misc",4483362458)
 local kE,sE,hE,gE,eE=false,false,false,false,false
-local cH,cL={},{}
+local cH,cL,lT,sI={}, {},0,1
 local function mkH(t,c)if t and t:IsA("Model")and not cH[t]then local h=Instance.new("Highlight")h.Adornee=t h.FillTransparency=0.5 h.OutlineTransparency=0 h.FillColor=c h.OutlineColor=c h.Parent=t cH[t]=h end end
 local function rmH(t)if cH[t]then cH[t]:Destroy()cH[t]=nil end end
-local function mkL(t,txt,c)if not t or not t:IsA("Model")then return end local r=t:FindFirstChildWhichIsA("BasePart")if not r then return end if not cL[t]then local b=Instance.new("BillboardGui")b.Size=UDim2.new(0,200,0,40)b.AlwaysOnTop=true b.StudsOffset=Vector3.new(0,3,0)b.Adornee=r b.Parent=t local l=Instance.new("TextLabel")l.Size=UDim2.new(1,0,1,0)l.BackgroundTransparency=1 l.TextColor3=c l.TextStrokeColor3=Color3.new(0,0,0)l.TextStrokeTransparency=0 l.Font=Enum.Font.SourceSansBold l.TextScaled=true l.Text=txt l.Parent=b cL[t]=b else local l=cL[t]:FindFirstChild("TextLabel")if l then l.Text=txt l.TextColor3=c end end end
+local function mkL(t,txt,c)if not t or not t:IsA("Model")then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart")then return end local r=t:FindFirstChildWhichIsA("BasePart")if not r then return end
+if not cL[t]then local b=Instance.new("BillboardGui")b.Size=UDim2.new(0,200,0,40)b.AlwaysOnTop=true b.StudsOffset=Vector3.new(0,3,0)b.Adornee=r b.Parent=t local l=Instance.new("TextLabel")l.Size=UDim2.new(1,0,1,0)l.BackgroundTransparency=1 l.TextColor3=c l.TextStrokeColor3=Color3.new(0,0,0)l.TextStrokeTransparency=0 l.Font=Enum.Font.SourceSansBold l.TextScaled=true l.Text=txt l.Parent=b cL[t]=b else local l=cL[t]:FindFirstChild("TextLabel")if l then l.Text=txt l.TextColor3=c end end end
 local function rmL(t)if cL[t]then cL[t]:Destroy()cL[t]=nil end end
-local function upL(t,n,c)if not t or not t:IsA("Model")then return end local r=t:FindFirstChildWhichIsA("BasePart")local p=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if r and p then local d=(p.Position-r.Position).Magnitude mkL(t,string.format("%s\n%.0f studs",n,d),c)end end
-local function refreshESP()
+local function upL(t,n,c)if not t or not t:IsA("Model")then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart")then return end local r=t:FindFirstChildWhichIsA("BasePart")local p=LP.Character.HumanoidRootPart if r and p then local d=(p.Position-r.Position).Magnitude mkL(t,string.format("%s\n%.0f studs",n,d),c)end end
+T1:CreateToggle({Name="Killer ESP",CurrentValue=false,Flag="KESP",Callback=function(v)kE=v if not v then for m,_ in pairs(cH)do if m:FindFirstChild("Killerost")then rmH(m)end end end end})
+T1:CreateToggle({Name="Survivor ESP",CurrentValue=false,Flag="SESP",Callback=function(v)sE=v if not v then for m,_ in pairs(cH)do if m:FindFirstChild("Highlight-forsurvivor")then rmH(m)end end end end})
+T1:CreateToggle({Name="Hook ESP",CurrentValue=false,Flag="HESP",Callback=function(v)hE=v if not v then for m,_ in pairs(cH)do if m:IsA("Model")and m.Name:lower():find("hook")then rmH(m)end end end end})
+T1:CreateToggle({Name="Generator ESP",CurrentValue=false,Flag="GESP",Callback=function(v)gE=v if not v then for m,_ in pairs(cH)do if m:IsA("Model")and(m.Name:lower():find("generator")or m.Name:lower():find("genpoint"))and not m.Name:lower():find("hook")then rmH(m)end end end end})
+T1:CreateToggle({Name="Exit ESP",CurrentValue=false,Flag="EESP",Callback=function(v)eE=v if not v then for m,_ in pairs(cH)do if m:IsA("Model")and m.Name=="ExitLever"then rmH(m)rmL(m)end end for ,o in pairs(W:GetDescendants())do if o.Name=="ExitLever"then local p=o.Parent if p and p:IsA("Model")then rmH(p)rmL(p)end end end end end})
+R.Heartbeat:Connect(function()local t=tick()if t-lT<sI then if eE then for m, in pairs(cL)do if m.Parent and m:IsA("Model")and m.Name=="ExitLever"then upL(m,"Exit",Color3.fromRGB(0,255,0))end end end return end lT=t
 for _,m in pairs(W:GetChildren())do if m:IsA("Model")then local k=m:FindFirstChild("Killerost")if kE and k then mkH(m,Color3.fromRGB(255,0,0))elseif not kE and k then rmH(m)end local s=m:FindFirstChild("Highlight-forsurvivor")if sE and s then mkH(m,Color3.fromRGB(0,170,255))elseif not sE and s then rmH(m)end end end
-if hE then for _,o in pairs(W:GetDescendants())do local n=o.Name:lower()if o:IsA("Model")and(n:find("hook")or n:find("hang")or n:find("meat"))then mkH(o,Color3.fromRGB(255,105,180))end end end
-if gE then for _,o in pairs(W:GetDescendants())do local n=o.Name:lower()if o:IsA("Model")and(n:find("generator")or n:find("gen")or n:find("machine"))then mkH(o,Color3.fromRGB(255,165,0))end end end
-if eE then for _,o in pairs(W:GetDescendants())do local n=o.Name:lower()if n:find("exit")or n:find("lever")or n:find("gate")then local p=o.Parent or o if p:IsA("Model")then mkH(p,Color3.fromRGB(0,255,0))upL(p,"Exit",Color3.fromRGB(0,255,0))end end end end
+if hE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model")and o.Name:lower():find("hook")then mkH(o,Color3.fromRGB(255,105,180))end end end
+if gE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model")and(o.Name:lower():find("generator")or o.Name:lower():find("genpoint"))and not o.Name:lower():find("hook")then mkH(o,Color3.fromRGB(255,165,0))end end end
+if eE then local M=W:FindFirstChild("Map")if M and #M:GetChildren()>=226 then local x=M:GetChildren()[225]if x then local e=x:FindFirstChild("ExitLever")if e then mkH(e.Parent or e,Color3.fromRGB(0,255,0))upL(e.Parent or e,"Exit ",Color3.fromRGB(0,255,0))end end end for _,o in pairs(W:GetDescendants())do if o.Name=="ExitLever"then local p=o.Parent or o if p:IsA("Model")then mkH(p,Color3.fromRGB(0,255,0))upL(p,"Exit",Color3.fromRGB(0,255,0))end end end end end)
+
+local function fireAllGenerators()
+local map = W:FindFirstChild("Map")
+if not map then return end
+for _, obj in ipairs(map:GetDescendants()) do
+if obj.Name:lower():find("generatorpoint") then
+pcall(function()
+RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success", 1, obj.Parent, obj)
+end)
 end
-T1:CreateToggle({Name="Killer ESP",CurrentValue=false,Flag="KESP",Callback=function(v)kE=v if v then refreshESP()else for m,_ in pairs(cH)do if m:FindFirstChild("Killerost")then rmH(m)end end end end})
-T1:CreateToggle({Name="Survivor ESP",CurrentValue=false,Flag="SESP",Callback=function(v)sE=v if v then refreshESP()else for m,_ in pairs(cH)do if m:FindFirstChild("Highlight-forsurvivor")then rmH(m)end end end end})
-T1:CreateToggle({Name="Hook ESP",CurrentValue=false,Flag="HESP",Callback=function(v)hE=v if v then refreshESP()else for m,_ in pairs(cH)do if m:IsA("Model")and m.Name:lower():find("hook")then rmH(m)end end end end})
-T1:CreateToggle({Name="Generator ESP",CurrentValue=false,Flag="GESP",Callback=function(v)gE=v if v then refreshESP()else for m,_ in pairs(cH)do if m:IsA("Model")and(m.Name:lower():find("generator")or m.Name:lower():find("genpoint"))then rmH(m)end end end end})
-T1:CreateToggle({Name="Exit ESP",CurrentValue=false,Flag="EESP",Callback=function(v)eE=v if v then refreshESP()else for m,_ in pairs(cH)do if m:IsA("Model")and(m.Name:lower():find("exit")or m.Name:lower():find("lever")or m.Name:lower():find("gate"))then rmH(m)end end for m,_ in pairs(cL)do if m:IsA("Model")and(m.Name:lower():find("exit")or m.Name:lower():find("lever")or m.Name:lower():find("gate"))then rmL(m)end end end end})
-task.spawn(function()while task.wait(5)do refreshESP()end end)
-local function fireAllGenerators()local map=W:FindFirstChild("Map")if not map then return end for _,obj in ipairs(map:GetDescendants())do if obj.Name:lower():find("generatorpoint")then pcall(function()RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success",1,obj.Parent,obj)end)end end end
-local generatorLoop=false
-T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback=function(v)generatorLoop=v if generatorLoop then task.spawn(function()while generatorLoop do fireAllGenerators()task.wait(0.1)end end)end end})
+end
+end
+
+local generatorLoop = false
+T2:CreateToggle({
+Name = "No fail generator",
+CurrentValue = false,
+Flag = "ASC",
+Callback = function(Value)
+generatorLoop = Value
+if generatorLoop then
+task.spawn(function()
+while generatorLoop do
+fireAllGenerators()
+task.wait(0.1)
+end
+end)
+end
+end
+})
+
+
 local function cl()for _,h in pairs(cH)do h:Destroy()end for _,l in pairs(cL)do l:Destroy()end cH,cL={},{ }end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then cl()end end)
 RY:LoadConfiguration()
+
+everything works here but kinda laggy not that much of a lag tho
+
