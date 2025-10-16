@@ -34,7 +34,7 @@ T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback
 local HEvent=RS.Remotes.Healing.SkillCheckResultEvent local NFH=false
 local function getC()local c=LP.Character if not c or not c:FindFirstChild("HumanoidRootPart")then return nil end local hrp=c.HumanoidRootPart local cl,d=nil,math.huge for _,pl in ipairs(P:GetPlayers())do if pl~=LP and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart")then local dis=(pl.Character.HumanoidRootPart.Position-hrp.Position).Magnitude if dis<d then cl=pl d=dis end end end return cl end
 
-T2:CreateToggle({Name="No fail heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function()while NFH do local t=getC()if t and t.Character then pcall(function()HEvent:FireServer("success",1,t.Character)end)end task.wait(0.1)end end)end})
+T2:CreateToggle({Name="Instant heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function()while NFH do local t=getC()if t and t.Character then pcall(function()HEvent:FireServer("success",1,t.Character)end)end task.wait(0.1)end end)end})
 
 
 T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not H then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(H,p,0)task.wait(0.02)firetouchinterest(H,p,1)end)end end end end})
