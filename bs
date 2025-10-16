@@ -20,7 +20,6 @@ d:AddToggle({text="auto fish",state=false,callback=function(v)_G.afs=v if v then
 
 e:AddButton({text="teleport to spawn",callback=function()local u=workspace:FindFirstChild("SpawnLocation")if u and a.Character and a.Character:FindFirstChild("HumanoidRootPart")then a.Character.HumanoidRootPart.CFrame=u.CFrame end end})
 e:AddButton({text="fly gui",callback=function()loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-v3-13879"))()end})
-e:AddButton({text="teleport to heli crash",callback=function()local g=a.Character and a.Character:FindFirstChild("HumanoidRootPart")if not g then return end for _,h in pairs(workspace:WaitForChild("interact"):GetChildren())do if h.Name=="heli_crash"and h:FindFirstChild("Body")then local i=h.Body:FindFirstChildWhichIsA("BasePart")if i then g.CFrame=i.CFrame+Vector3.new(0,3,0)break end end end end})
 e:AddLabel({text="Made by Pall(@opalbetus)"})
 e:AddLabel({text="https://discord.gg/TbK2NWqS5R"})
 b:Init()
