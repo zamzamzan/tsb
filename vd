@@ -37,7 +37,7 @@ local function getC()local c=LP.Character if not c or not c:FindFirstChild("Huma
 T2:CreateToggle({Name="No fail heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function()while NFH do local t=getC()if t and t.Character then pcall(function()HEvent:FireServer("success",1,t.Character)end)end task.wait(0.1)end end)end})
 
 
-T2:CreateButton({Name="Escape without opening gate(free 200 coin)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not H then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(H,p,0)task.wait(0.02)firetouchinterest(H,p,1)end)end end end end})
+T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not H then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(H,p,0)task.wait(0.02)firetouchinterest(H,p,1)end)end end end end})
 T2:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
 T2:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
 
