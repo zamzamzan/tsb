@@ -41,8 +41,57 @@ T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callb
 local T3=WN:CreateTab("Power",4483362458)local sM="Alex"local aP=false
 T3:CreateParagraph({Title="info",Content=[[you need to use the masked killer for it to work]]})
 T3:CreateDropdown({Name="Select mask",Options={"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"},CurrentOption="Alex",Flag="MaskSelect",Callback=function(o)sM=o end})
-T3:CreateButton({Name="Use mask power",Callback=function()local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)end})
-T3:CreateToggle({Name="Auto use mask",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)task.wait(35)end end)end})
+T3:CreateButton({Name="Use mask power",Callback=function()
+if LP.Character then
+local args = {}
+if sM == "Alex" then
+args = {"ChainsawCharge"}
+elseif sM == "Tony" then
+args = {"FistsOfFury"}
+elseif sM == "Brandon" then
+args = {"SpeedBuff"}
+elseif sM == "Jake" then
+args = {"LongLunge"}
+elseif sM == "Richter" then
+args = {"Stealth"}
+elseif sM == "Graham" then
+args = {"FasterVaults"}
+elseif sM == "Richard" then
+args = {"DefaultMask"}
+end
+
+pcall(function()
+RS.Remotes.Killers.Masked.Activatepower:FireServer(unpack(args))
+end)
+end
+
+end})
+T3:CreateToggle({Name="Auto use mask",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do
+if LP.Character then
+local args = {}
+if sM == "Alex" then
+args = {"ChainsawCharge"}
+elseif sM == "Tony" then
+args = {"FistsOfFury"}
+elseif sM == "Brandon" then
+args = {"SpeedBuff"}
+elseif sM == "Jake" then
+args = {"LongLunge"}
+elseif sM == "Richter" then
+args = {"Stealth"}
+elseif sM == "Graham" then
+args = {"FasterVaults"}
+elseif sM == "Richard" then
+args = {"DefaultMask"}
+end
+
+pcall(function()
+RS.Remotes.Killers.Masked.Activatepower:FireServer(unpack(args))
+end)
+end
+task.wait(35)
+
+end end)end})
 T3:CreateParagraph({Title="Masked power info",Content=[[Alex=Chainsaw charge
 Tony=Fists of fury
 Brandon=Speed buff
@@ -58,7 +107,7 @@ T4:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i do
 T4:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4})
 end})
 
-local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{ }end
+local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{}end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then clr()end end)
 L:LoadConfiguration()
 
