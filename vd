@@ -25,15 +25,22 @@ if hE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model")and o.Name:lo
 if gE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model")and(o.Name:lower():find("generator")or o.Name:lower():find("genpoint"))and not o.Name:lower():find("hook")then mkH(o,Color3.fromRGB(255,165,0))end end end
 if eE then local M=W:FindFirstChild("Map")if M and #M:GetChildren()>=225 then local x=M:GetChildren()[225]if x then local e=x:FindFirstChild("ExitLever")if e then mkH(e.Parent or e,Color3.fromRGB(0,255,0))upL(e.Parent or e,"Exit",Color3.fromRGB(0,255,0))end end end for _,o in pairs(W:GetDescendants())do if o.Name=="ExitLever"then local p=o.Parent or o if p:IsA("Model")then mkH(p,Color3.fromRGB(0,255,0))upL(p,"Exit",Color3.fromRGB(0,255,0))end end end end end)
 
-local function fireAllGen()local M=W:FindFirstChild("Map")if not M then return end for _,o in ipairs(M:GetDescendants())do if o.Name:lower():find("generatorpoint")then pcall(function()RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success",1,o.Parent,o)end)end end end
+local function fireGen()local M=W:FindFirstChild("Map")if not M then return end for _,o in ipairs(M:GetDescendants())do if o.Name:lower():find("generatorpoint")then pcall(function()RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success",1,o.Parent,o)end)end end end
 T1:CreateParagraph({Title="i recommend not to always use hook esp (if ruin ur gameplay)",Content="because its kinda laggy idk how to fix it"})
 
 local G=false
-T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback=function(v)G=v if G then task.spawn(function()while G do fireAllGen()task.wait(0.1)end end)end end})
+T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback=function(v)G=v if G then task.spawn(function()while G do fireGen()task.wait(0.1)end end)end end})
 
-T2:CreateButton({Name="Escape without opening gate(free 200 coin)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local HRP=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not HRP then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(HRP,p,0)task.wait(0.02)firetouchinterest(HRP,p,1)end)end end end end})
+local HEvent=RS.Remotes.Healing.SkillCheckResultEvent local NFH=false
+local function getC()local c=LP.Character if not c or not c:FindFirstChild("HumanoidRootPart")then return nil end local hrp=c.HumanoidRootPart local cl,d=nil,math.huge for _,pl in ipairs(P:GetPlayers())do if pl~=LP and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart")then local dis=(pl.Character.HumanoidRootPart.Position-hrp.Position).Magnitude if dis<d then cl=pl d=dis end end end return cl end
+
+T2:CreateToggle({Name="No Fail Heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function()while NFH do local t=getC()if t and t.Character then pcall(function()HEvent:FireServer("success",1,t.Character)end)end task.wait(0.1)end end)end})
+
+
+T2:CreateButton({Name="Escape without opening gate(free 200 coin)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not H then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(H,p,0)task.wait(0.02)firetouchinterest(H,p,1)end)end end end end})
 T2:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
 T2:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
+
 
 local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{ }end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then clr()end end)
