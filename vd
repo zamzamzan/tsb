@@ -42,6 +42,7 @@ T2:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
 T2:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
 
 local T3=WN:CreateTab("Power",4483362458)local sM="Alex"local aP=false
+T3:CreateParagraph({Title="info",Content=[[you need to use the masked killer for it to work]]})
 T3:CreateDropdown({Name="Select Mask",Options={"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"},CurrentOption="Alex",Flag="MaskSelect",Callback=function(o)sM=o end})
 T3:CreateButton({Name="Use mask power",Callback=function()local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)end})
 T3:CreateToggle({Name="Auto use mask",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)task.wait(35)end end)end})
