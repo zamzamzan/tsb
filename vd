@@ -43,9 +43,9 @@ T2:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i do
 
 local T3=WN:CreateTab("Power",4483362458)local sM="Alex"local aP=false
 T3:CreateDropdown({Name="Select Mask",Options={"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"},CurrentOption="Alex",Flag="MaskSelect",Callback=function(o)sM=o end})
-T3:CreateButton({Name="Use Mask Power",Callback=function()local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)end})
-T3:CreateToggle({Name="Auto Use Power",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)task.wait(35)end end)end})
-T3:CreateParagraph({Title="Masked Powers Info",Content=[[Alex=Chainsaw charge
+T3:CreateButton({Name="Use mask power",Callback=function()local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)end})
+T3:CreateToggle({Name="Auto use mask",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)task.wait(35)end end)end})
+T3:CreateParagraph({Title="Masked power info",Content=[[Alex=Chainsaw charge
 Tony=Fists of fury
 Brandon=Speed buff
 Jake=Long lunge
