@@ -1,4 +1,4 @@
-workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
+ workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
 task.spawn(function()while task.wait(20)do for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end end end)
 
 local P=game:GetService("Players")local W=game:GetService("Workspace")local R=game:GetService("RunService")local RS=game:GetService("ReplicatedStorage")local LP=P.LocalPlayer
@@ -38,67 +38,86 @@ T2:CreateToggle({Name="Instant heal",CurrentValue=false,Flag="NFH",Callback=func
 
 T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callback=function()local M=W:FindFirstChild("Map")if not M then return end local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")if not H then return end for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter")or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function()firetouchinterest(H,p,0)task.wait(0.02)firetouchinterest(H,p,1)end)end end end end})
 
-local T3=WN:CreateTab("Power",4483362458)local sM="Alex"local aP=false
-T3:CreateParagraph({Title="info",Content=[[you need to use the masked killer for it to work]]})
-T3:CreateDropdown({Name="Select mask",Options={"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"},CurrentOption="Alex",Flag="MaskSelect",Callback=function(o)sM=o end})
-T3:CreateButton({Name="Use mask power",Callback=function()
-if LP.Character then
-local args = {}
-if sM == "Alex" then
-args = {"ChainsawCharge"}
-elseif sM == "Tony" then
-args = {"FistsOfFury"}
-elseif sM == "Brandon" then
-args = {"SpeedBuff"}
-elseif sM == "Jake" then
-args = {"LongLunge"}
-elseif sM == "Richter" then
-args = {"Stealth"}
-elseif sM == "Graham" then
-args = {"FasterVaults"}
-elseif sM == "Richard" then
-args = {"DefaultMask"}
-end
+-- Skidded Mask Power Section
+local T3 = WN:CreateTab("Power",4483362458)
+local SelectedMask = "Alex"
+local AutoMask = false
 
-pcall(function()
-RS.Remotes.Killers.Masked.Activatepower:FireServer(unpack(args))
-end)
-end
+T3:CreateParagraph({Title = "Masked Killer Power",Content = "You need to be playing as Masked Killer for this to work"})
 
-end})
-T3:CreateToggle({Name="Auto use mask",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do
-if LP.Character then
-local args = {}
-if sM == "Alex" then
-args = {"ChainsawCharge"}
-elseif sM == "Tony" then
-args = {"FistsOfFury"}
-elseif sM == "Brandon" then
-args = {"SpeedBuff"}
-elseif sM == "Jake" then
-args = {"LongLunge"}
-elseif sM == "Richter" then
-args = {"Stealth"}
-elseif sM == "Graham" then
-args = {"FasterVaults"}
-elseif sM == "Richard" then
-args = {"DefaultMask"}
-end
+T3:CreateDropdown({
+    Name = "Select Mask",
+    Options = {"Alex", "Tony", "Brandon", "Jake", "Richter", "Graham", "Richard"},
+    CurrentOption = "Alex",
+    Flag = "MaskSelector",
+    Callback = function(Value)
+        SelectedMask = Value
+    end
+})
 
-pcall(function()
-RS.Remotes.Killers.Masked.Activatepower:FireServer(unpack(args))
-end)
-end
-task.wait(35)
+T3:CreateButton({
+    Name = "Use Mask Power",
+    Callback = function()
+        if SelectedMask == "Alex" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("ChainsawCharge")
+        elseif SelectedMask == "Tony" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("FistsOfFury")
+        elseif SelectedMask == "Brandon" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("SpeedBuff")
+        elseif SelectedMask == "Jake" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("LongLunge")
+        elseif SelectedMask == "Richter" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("Stealth")
+        elseif SelectedMask == "Graham" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("FasterVaults")
+        elseif SelectedMask == "Richard" then
+            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("DefaultMask")
+        end
+    end
+})
 
-end end)end})
-T3:CreateParagraph({Title="Masked power info",Content=[[Alex=Chainsaw charge
-Tony=Fists of fury
-Brandon=Speed buff
-Jake=Long lunge
-Richter=Stealth
-Graham=Faster vaults
-Richard=Default mask]]})
+T3:CreateToggle({
+    Name = "Auto Use Mask Power",
+    CurrentValue = false,
+    Flag = "AutoMaskToggle",
+    Callback = function(Value)
+        AutoMask = Value
+        if AutoMask then
+            task.spawn(function()
+                while AutoMask do
+                    task.wait(35)
+                    if AutoMask then
+                        if SelectedMask == "Alex" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("ChainsawCharge")
+                        elseif SelectedMask == "Tony" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("FistsOfFury")
+                        elseif SelectedMask == "Brandon" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("SpeedBuff")
+                        elseif SelectedMask == "Jake" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("LongLunge")
+                        elseif SelectedMask == "Richter" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("Stealth")
+                        elseif SelectedMask == "Graham" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("FasterVaults")
+                        elseif SelectedMask == "Richard" then
+                            game:GetService("ReplicatedStorage").Remotes.Killers.Masked.Activatepower:FireServer("DefaultMask")
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+
+T3:CreateParagraph({Title = "Mask Powers Info", Content = [[
+Alex - Chainsaw Charge
+Tony - Fists of Fury  
+Brandon - Speed Buff
+Jake - Long Lunge
+Richter - Stealth
+Graham - Faster Vaults
+Richard - Default Mask
+]]})
 
 local T4=WN:CreateTab("Info",4483362458)
 
@@ -110,4 +129,3 @@ end})
 local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{}end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then clr()end end)
 L:LoadConfiguration()
-
