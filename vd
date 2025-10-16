@@ -41,6 +41,17 @@ T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callb
 T2:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
 T2:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
 
+local T3=WN:CreateTab("Power",4483362458)local sM="Alex"local aP=false
+T3:CreateDropdown({Name="Select Mask",Options={"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"},CurrentOption="Alex",Flag="MaskSelect",Callback=function(o)sM=o end})
+T3:CreateButton({Name="Use Mask Power",Callback=function()local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)end})
+T3:CreateToggle({Name="Auto Use Power",CurrentValue=false,Flag="AutoP",Callback=function(v)aP=v task.spawn(function()while aP do local r=RS.Remotes.Killers.Masked.Activatepower pcall(function()r:FireServer(sM)end)task.wait(35)end end)end})
+T3:CreateParagraph({Title="Masked Powers Info",Content=[[Alex=Chainsaw charge
+Tony=Fists of fury
+Brandon=Speed buff
+Jake=Long lunge
+Richter=Stealth
+Graham=Faster vaults
+Richard=Default mask]]})
 
 local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{ }end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then clr()end end)
