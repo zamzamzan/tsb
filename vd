@@ -70,7 +70,7 @@ if not H then return end
 for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter") or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function() firetouchinterest(H,p,0) task.wait(0.02) firetouchinterest(H,p,1) end) end end end
 end})
 
-
+T3:CreateParagraph({Title="Info(need to use the masked killer)",Content="Use buttons below to pick which mask u want to use"})
 T3:CreateParagraph({
 Title = "Mask powers info",
 Content = [[
@@ -80,8 +80,7 @@ Brandon - Speed
 Jake - Long Lunge  
 Richter - Stealth  
 Graham - Faster vaults  
-Richard - Default mask
-]]
+Richard - Default mask]]
 })
 local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(n) end
 for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
