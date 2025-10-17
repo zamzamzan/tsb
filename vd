@@ -1,3 +1,7 @@
+--// hi skid
+
+
+-- ignore this
 workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
 task.spawn(function()while task.wait(20)do for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end end end)
 
