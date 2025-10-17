@@ -1,176 +1,83 @@
-workspace.DescendantAdded:Connect(function(o)
-if o.Name:lower():find("antifling") then pcall(function() o:Destroy() end) end
-end)
+workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
+task.spawn(function()while task.wait(20)do for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end end end)
 
-task.spawn(function()
-while task.wait(20) do
-for _, o in ipairs(workspace:GetDescendants()) do
-if o.Name:lower():find("antifling") then pcall(function() o:Destroy() end) end
-end
-end
-end)
+local P=game:GetService("Players")
+local W=game:GetService("Workspace")
+local R=game:GetService("RunService")
+local RS=game:GetService("ReplicatedStorage")
+local LP=P.LocalPlayer
+local L=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local WN=L:CreateWindow({Name="violence district",LoadingTitle="Loading peak script",LoadingSubtitle="by pall(@opalbetus)",ConfigurationSaving={Enabled=true,FolderName="sigma",FileName="ESP"}})
 
-local P = game:GetService("Players")
-local W = game:GetService("Workspace")
-local R = game:GetService("RunService")
-local RS = game:GetService("ReplicatedStorage")
-local LP = P.LocalPlayer
-local L = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-local WN = L:CreateWindow({
-Name = "violence district",
-LoadingTitle = "Loading peak script",
-LoadingSubtitle = "by pall(@opalbetus)",
-ConfigurationSaving = {Enabled = true, FolderName = "sigma", FileName = "ESP"}
-})
+local T1=WN:CreateTab("ESP",4483362458)
+local T2=WN:CreateTab("Misc",4483362458)
+local T3=WN:CreateTab("Power",4483362458)
+local T4=WN:CreateTab("Info",4483362458)
+local kE,sE,hE,gE,eE=false,false,false,false,false
+local H,Lb,lt,si={}, {},0,1
 
-local T1 = WN:CreateTab("ESP", 4483362458)
-local T2 = WN:CreateTab("Misc", 4483362458)
+local function mH(t,c)if t and t:IsA("Model") and not H[t]then local h=Instance.new("Highlight")h.Adornee=t h.FillTransparency=0.5 h.OutlineTransparency=0 h.FillColor=c h.OutlineColor=c h.Parent=t H[t]=h end end
+local function rH(t)if H[t]then H[t]:Destroy() H[t]=nil end end
+local function mL(t,txt,c)if not t or not t:IsA("Model")then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart")then return end local r=t:FindFirstChildWhichIsA("BasePart") if not r then return end if not Lb[t]then local b=Instance.new("BillboardGui") b.Size=UDim2.new(0,200,0,40) b.AlwaysOnTop=true b.StudsOffset=Vector3.new(0,3,0) b.Adornee=r b.Parent=t local l=Instance.new("TextLabel") l.Size=UDim2.new(1,0,1,0) l.BackgroundTransparency=1 l.TextColor3=c l.TextStrokeColor3=Color3.new(0,0,0) l.TextStrokeTransparency=0 l.Font=Enum.Font.SourceSansBold l.TextScaled=true l.Text=txt l.Parent=b Lb[t]=b else local l=Lb[t]:FindFirstChild("TextLabel") if l then l.Text=txt l.TextColor3=c end end end
+local function rL(t)if Lb[t]then Lb[t]:Destroy() Lb[t]=nil end end
+local function uL(t,n,c)if not t or not t:IsA("Model")then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart")then return end local r=t:FindFirstChildWhichIsA("BasePart") local p=LP.Character.HumanoidRootPart if r and p then local d=(p.Position-r.Position).Magnitude mL(t,string.format("%s\n%.0f studs",n,d),c) end end
 
-local kE, sE, hE, gE, eE = false, false, false, false, false
-local H, Lb, lT, sI = {}, {}, 0, 1
-
-local function mkH(t, c) if t and t:IsA("Model") and not H[t] then local h=Instance.new("Highlight") h.Adornee=t h.FillTransparency=0.5 h.OutlineTransparency=0 h.FillColor=c h.OutlineColor=c h.Parent=t H[t]=h end end
-local function rmH(t) if H[t] then H[t]:Destroy() H[t]=nil end end
-local function mkL(t, txt, c) if not t or not t:IsA("Model") then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart") then return end local r=t:FindFirstChildWhichIsA("BasePart") if not r then return end if not Lb[t] then local b=Instance.new("BillboardGui") b.Size=UDim2.new(0,200,0,40) b.AlwaysOnTop=true b.StudsOffset=Vector3.new(0,3,0) b.Adornee=r b.Parent=t local l=Instance.new("TextLabel") l.Size=UDim2.new(1,0,1,0) l.BackgroundTransparency=1 l.TextColor3=c l.TextStrokeColor3=Color3.new(0,0,0) l.TextStrokeTransparency=0 l.Font=Enum.Font.SourceSansBold l.TextScaled=true l.Text=txt l.Parent=b Lb[t]=b else local l=Lb[t]:FindFirstChild("TextLabel") if l then l.Text=txt l.TextColor3=c end end end
-local function rmL(t) if Lb[t] then Lb[t]:Destroy() Lb[t]=nil end end
-local function upL(t, n, c) if not t or not t:IsA("Model") then return end if not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart") then return end local r=t:FindFirstChildWhichIsA("BasePart") local p=LP.Character.HumanoidRootPart if r and p then local d=(p.Position-r.Position).Magnitude mkL(t, string.format("%s\n%.0f studs", n, d), c) end end
-
-T1:CreateToggle({Name="Killer ESP", CurrentValue=false, Flag="KESP", Callback=function(v) kE=v if not v then for m,_ in pairs(H) do if m:FindFirstChild("Killerost") then rmH(m) end end end end})
-T1:CreateToggle({Name="Survivor ESP", CurrentValue=false, Flag="SESP", Callback=function(v) sE=v if not v then for m,_ in pairs(H) do if m:FindFirstChild("Highlight-forsurvivor") then rmH(m) end end end end})
-T1:CreateToggle({Name="Hook ESP", CurrentValue=false, Flag="HESP", Callback=function(v) hE=v if not v then for m,_ in pairs(H) do if m:IsA("Model") and m.Name:lower():find("hook") then rmH(m) end end end end})
-T1:CreateToggle({Name="Generator ESP", CurrentValue=false, Flag="GESP", Callback=function(v) gE=v if not v then for m,_ in pairs(H) do if m:IsA("Model") and (m.Name:lower():find("generator") or m.Name:lower():find("genpoint")) and not m.Name:lower():find("hook") then rmH(m) end end end end})
-T1:CreateToggle({Name="Exit ESP", CurrentValue=false, Flag="EESP", Callback=function(v) eE=v if not v then for m,_ in pairs(H) do if m:IsA("Model") and m.Name=="ExitLever" then rmH(m) rmL(m) end end for _,o in pairs(W:GetDescendants()) do if o.Name=="ExitLever" then local p=o.Parent if p and p:IsA("Model") then rmH(p) rmL(p) end end end end end})
+T1:CreateToggle({Name="Killer ESP",CurrentValue=false,Flag="KESP",Callback=function(v)kE=v if not v then for m,_ in pairs(H)do if m:FindFirstChild("Killerost")then rH(m)end end end end})
+T1:CreateToggle({Name="Survivor ESP",CurrentValue=false,Flag="SESP",Callback=function(v)sE=v if not v then for m,_ in pairs(H)do if m:FindFirstChild("Highlight-forsurvivor")then rH(m)end end end end})
+T1:CreateToggle({Name="Hook ESP",CurrentValue=false,Flag="HESP",Callback=function(v)hE=v if not v then for m,_ in pairs(H)do if m:IsA("Model") and m.Name:lower():find("hook")then rH(m)end end end end})
+T1:CreateToggle({Name="Generator ESP",CurrentValue=false,Flag="GESP",Callback=function(v)gE=v if not v then for m,_ in pairs(H)do if m:IsA("Model") and (m.Name:lower():find("generator") or m.Name:lower():find("genpoint")) and not m.Name:lower():find("hook")then rH(m)end end end end})
+T1:CreateToggle({Name="Exit ESP",CurrentValue=false,Flag="EESP",Callback=function(v)eE=v if not v then for m,_ in pairs(H)do if m:IsA("Model") and m.Name=="ExitLever"then rH(m) rL(m)end end for _,o in pairs(W:GetDescendants())do if o.Name=="ExitLever"then local p=o.Parent if p and p:IsA("Model")then rH(p) rL(p)end end end end end})
 
 R.Heartbeat:Connect(function()
 local t=tick()
-if t-lT<sI then
-if eE then for m,_ in pairs(Lb) do if m.Parent and m:IsA("Model") and m.Name=="ExitLever" then upL(m,"Exit",Color3.fromRGB(0,255,0)) end end end
-return
-end
-lT=t
-for _,m in pairs(W:GetChildren()) do
-if m:IsA("Model") then
-local k=m:FindFirstChild("Killerost")
-if kE and k then mkH(m,Color3.fromRGB(255,0,0)) elseif not kE and k then rmH(m) end
-local s=m:FindFirstChild("Highlight-forsurvivor")
-if sE and s then mkH(m,Color3.fromRGB(0,170,255)) elseif not sE and s then rmH(m) end
+if t-lt<si then
+if eE then for m,_ in pairs(Lb)do if m.Parent and m:IsA("Model") and m.Name=="ExitLever"then uL(m,"Exit",Color3.fromRGB(0,255,0)) end end end
+return end
+lt=t
+for _,m in pairs(W:GetChildren())do
+if m:IsA("Model")then
+local k=m:FindFirstChild("Killerost") if kE and k then mH(m,Color3.fromRGB(255,0,0)) elseif not kE and k then rH(m) end
+local s=m:FindFirstChild("Highlight-forsurvivor") if sE and s then mH(m,Color3.fromRGB(0,170,255)) elseif not sE and s then rH(m) end
 end
 end
-if hE then for _,o in pairs(W:GetDescendants()) do if o:IsA("Model") and o.Name:lower():find("hook") then mkH(o,Color3.fromRGB(255,105,180)) end end end
-if gE then for _,o in pairs(W:GetDescendants()) do if o:IsA("Model") and (o.Name:lower():find("generator") or o.Name:lower():find("genpoint")) and not o.Name:lower():find("hook") then mkH(o,Color3.fromRGB(255,165,0)) end end end
-if eE then
-local M=W:FindFirstChild("Map")
-if M and #M:GetChildren()>=225 then local x=M:GetChildren()[225] if x then local e=x:FindFirstChild("ExitLever") if e then mkH(e.Parent or e,Color3.fromRGB(0,255,0)) upL(e.Parent or e,"Exit",Color3.fromRGB(0,255,0)) end end end
-for _,o in pairs(W:GetDescendants()) do if o.Name=="ExitLever" then local p=o.Parent or o if p:IsA("Model") then mkH(p,Color3.fromRGB(0,255,0)) upL(p,"Exit",Color3.fromRGB(0,255,0)) end end end
-end
+if hE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model") and o.Name:lower():find("hook")then mH(o,Color3.fromRGB(255,105,180)) end end end
+if gE then for _,o in pairs(W:GetDescendants())do if o:IsA("Model") and (o.Name:lower():find("generator") or o.Name:lower():find("genpoint")) and not o.Name:lower():find("hook")then mH(o,Color3.fromRGB(255,165,0)) end end end
+if eE then local M=W:FindFirstChild("Map") if M and #M:GetChildren()>=225 then local x=M:GetChildren()[225] if x then local e=x:FindFirstChild("ExitLever") if e then mH(e.Parent or e,Color3.fromRGB(0,255,0)) uL(e.Parent or e,"Exit",Color3.fromRGB(0,255,0)) end end end
+for _,o in pairs(W:GetDescendants())do if o.Name=="ExitLever"then local p=o.Parent or o if p:IsA("Model")then mH(p,Color3.fromRGB(0,255,0)) uL(p,"Exit",Color3.fromRGB(0,255,0)) end end end end
 end)
 
-local function fireGen()
-local M=W:FindFirstChild("Map")
-if not M then return end
-for _,o in ipairs(M:GetDescendants()) do
-if o.Name:lower():find("generatorpoint") then
-pcall(function() RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success",1,o.Parent,o) end)
-end
-end
-end
+local function fG() local M=W:FindFirstChild("Map") if not M then return end for _,o in ipairs(M:GetDescendants())do if o.Name:lower():find("generatorpoint")then pcall(function()RS.Remotes.Generator.SkillCheckResultEvent:FireServer("success",1,o.Parent,o)end)end end end
 T1:CreateParagraph({Title="i recommend not to always use hook esp (if ruin ur gameplay)",Content="because its kinda laggy idk how to fix it"})
 
 local G=false
-T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback=function(v) G=v if G then task.spawn(function() while G do fireGen() task.wait(0.1) end end) end end})
+T2:CreateToggle({Name="No fail generator",CurrentValue=false,Flag="ASC",Callback=function(v)G=v if G then task.spawn(function() while G do fG() task.wait(0.1)end end)end end})
 
 local HEvent=RS.Remotes.Healing.SkillCheckResultEvent
 local NFH=false
-local function getC()
-local c=LP.Character
-if not c or not c:FindFirstChild("HumanoidRootPart") then return nil end
-local hrp=c.HumanoidRootPart
-local cl,d=nil,math.huge
-for _,pl in ipairs(P:GetPlayers()) do
-if pl~=LP and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart") then
-local dis=(pl.Character.HumanoidRootPart.Position-hrp.Position).Magnitude
-if dis<d then cl=pl d=dis end
-end
-end
-return cl
-end
+local function gC() local c=LP.Character if not c or not c:FindFirstChild("HumanoidRootPart")then return nil end local hrp=c.HumanoidRootPart local cl,d=nil,math.huge for _,pl in ipairs(P:GetPlayers())do if pl~=LP and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart")then local dis=(pl.Character.HumanoidRootPart.Position-hrp.Position).Magnitude if dis<d then cl=pl d=dis end end end return cl end
 
-T2:CreateToggle({Name="Instant heal",CurrentValue=false,Flag="NFH",Callback=function(v)
-NFH=v
-task.spawn(function()
-while NFH do
-local t=getC()
-if t and t.Character then pcall(function() HEvent:FireServer("success",1,t.Character) end) end
-task.wait(0.1)
-end
-end)
-end})
+T2:CreateToggle({Name="Instant heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function() while NFH do local t=gC() if t and t.Character then pcall(function() HEvent:FireServer("success",1,t.Character)end) end task.wait(0.1)end end)end})
 
 T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callback=function()
 local M=W:FindFirstChild("Map")
 if not M then return end
 local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")
 if not H then return end
-for _,d in ipairs(M:GetDescendants()) do
-if d:IsA("TouchTransmitter") or d.Name=="TouchInterest" then
-local p=d.Parent
-if p and p:IsA("BasePart") then
-pcall(function()
-firetouchinterest(H,p,0)
-task.wait(0.02)
-firetouchinterest(H,p,1)
-end)
-end
-end
-end
+for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter") or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function() firetouchinterest(H,p,0) task.wait(0.02) firetouchinterest(H,p,1) end) end end end
 end})
 
-local T3 = WN:CreateTab("Power",4483362458)
 
-T3:CreateParagraph({Title = "Info",Content = "Use the buttons below to activate masks."})
-T3:CreateParagraph({Title = "Mask powers info", Content = [[
-Alex - Chainsaw Charge
-Tony - Fists of Furry
-Brandon - Speed Buff
-Jake - Long Lunge
-Richter - Stealth
-Graham - Faster Vaults
-Richard - Default Mask
-]]})
+T3:CreateParagraph({Title="Info",Content="Use the buttons below to activate masks."})
+T3:CreateParagraph({Title="Mask powers info",Content="Alex-Chainsaw Tony-Fists Brandon-Speed Jake-Long Lunge Richter-Stealth Graham-Faster Vaults Richard-Default Mask"})
 
-local function useMask(maskName)
-local args = {maskName}
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
-:WaitForChild("Killers")
-:WaitForChild("Masked")
-:WaitForChild("Activatepower")
-:FireServer(unpack(args))
-end
+local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(n) end
+for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
 
-local maskList = {"Alex", "Tony", "Brandon", "Jake", "Richter", "Graham", "Richard"}
-for _, mask in ipairs(maskList) do
-T3:CreateButton({
-Name = mask,
-Callback = function()
-useMask(mask)
-end
-})
-end
-
-local T4=WN:CreateTab("Info",4483362458)
 
 T4:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
 T4:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
-T4:CreateButton({Name="copy discord invite",Callback=function()
-setclipboard("https://discord.gg/TbK2NWqS5R")
-L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4})
-end})
+T4:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4}) end})
 
-local function clr()
-for _,h in pairs(H) do h:Destroy() end
-for _,l in pairs(Lb) do l:Destroy() end
-H,Lb={}
-end
+local function clr() for _,h in pairs(H)do h:Destroy() end for _,l in pairs(Lb)do l:Destroy() end H,Lb={} end
 P.PlayerRemoving:Connect(function(pl) if pl==LP then clr() end end)
 L:LoadConfiguration()
-
