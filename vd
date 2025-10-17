@@ -1,4 +1,4 @@
- workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
+workspace.DescendantAdded:Connect(function(o)if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end)
 task.spawn(function()while task.wait(20)do for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("antifling")then pcall(function()o:Destroy()end)end end end end)
 
 local P=game:GetService("Players")local W=game:GetService("Workspace")local R=game:GetService("RunService")local RS=game:GetService("ReplicatedStorage")local LP=P.LocalPlayer
@@ -45,50 +45,50 @@ local AutoMask = false
 T3:CreateParagraph({Title = "Info",Content = "you need to use the masked to make it work"})
 
 T3:CreateDropdown({
-    Name = "Select mask",
-    Options = {"Alex", "Tony", "Brandon", "Jake", "Richter", "Graham", "Richard"},
-    CurrentOption = "Brandon",
-    Flag = "MaskSelector",
-    Callback = function(Value)
-        SelectedMask = Value
-    end
+Name = "Select mask",
+Options = {"Alex", "Tony", "Brandon", "Jake", "Richter", "Graham", "Richard"},
+CurrentOption = "Brandon",
+Flag = "MaskSelector",
+Callback = function(Value)
+SelectedMask = Value
+end
 })
 
 T3:CreateButton({
-    Name = "Use mask",
-    Callback = function()
-        local args = {
-            SelectedMask
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(unpack(args))
-    end
+Name = "Use mask",
+Callback = function()
+local args = {
+SelectedMask
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(unpack(args))
+end
 })
 
 T3:CreateToggle({
-    Name = "Auto use mask",
-    CurrentValue = false,
-    Flag = "AutoMaskToggle",
-    Callback = function(Value)
-        AutoMask = Value
-        if AutoMask then
-            task.spawn(function()
-                while AutoMask do
-                    task.wait(35)
-                    if AutoMask then
-                        local args = {
-                            SelectedMask
-                        }
-                        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(unpack(args))
-                    end
-                end
-            end)
-        end
-    end
+Name = "Auto use mask",
+CurrentValue = false,
+Flag = "AutoMaskToggle",
+Callback = function(Value)
+AutoMask = Value
+if AutoMask then
+task.spawn(function()
+while AutoMask do
+task.wait(35)
+if AutoMask then
+local args = {
+SelectedMask
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(unpack(args))
+end
+end
+end)
+end
+end
 })
 
 T3:CreateParagraph({Title = "Mask powers info", Content = [[
 Alex - Chainsaw Charge
-Tony - Fists of Fury  
+Tony - Fists of Fury
 Brandon - Speed Buff
 Jake - Long Lunge
 Richter - Stealth
@@ -106,3 +106,4 @@ end})
 local function clr()for _,h in pairs(H)do h:Destroy()end for _,l in pairs(Lb)do l:Destroy()end H,Lb={},{}end
 P.PlayerRemoving:Connect(function(pl)if pl==LP then clr()end end)
 L:LoadConfiguration()
+
