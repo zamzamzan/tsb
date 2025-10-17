@@ -71,9 +71,18 @@ for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter") or d.Name==
 end})
 
 
-T3:CreateParagraph({Title="Info",Content="Use the buttons below to activate masks."})
-T3:CreateParagraph({Title="Mask powers info",Content="Alex-Chainsaw Tony-Fists Brandon-Speed Jake-Long Lunge Richter-Stealth Graham-Faster Vaults Richard-Default Mask"})
-
+T3:CreateParagraph({
+Title = "Mask powers info",
+Content = [[
+Alex - Chainsaw  
+Tony - Fists  
+Brandon - Speed  
+Jake - Long Lunge  
+Richter - Stealth  
+Graham - Faster vaults  
+Richard - Default mask
+]]
+})
 local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(n) end
 for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
 
