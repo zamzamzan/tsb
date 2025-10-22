@@ -103,14 +103,13 @@ Content = [[
 Alex - Chainsaw  
 Tony - Fists  
 Brandon - Speed  
-Jake - Long Lunge  
+Jake - Long lunge  
 Richter - Stealth  
 Graham - Faster vaults  
 Richard - Default mask]]
 })
 local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Masked"):WaitForChild("Activatepower"):FireServer(n) end
 for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
-
 
 
 T4:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
