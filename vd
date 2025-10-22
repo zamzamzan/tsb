@@ -16,8 +16,7 @@ local WN=L:CreateWindow({Name="violence district",LoadingTitle="Loading peak scr
 local T1=WN:CreateTab("ESP",4483362458)
 local T2=WN:CreateTab("Misc",4483362458)
 local T3=WN:CreateTab("Power",4483362458)
-local T4=WN:CreateTab("Crosshair",4483362458)
-local T5=WN:CreateTab("Info",4483362458)
+local T4=WN:CreateTab("Info",4483362458)
 local kE,sE,hE,gE,eE=false,false,false,false,false
 local H,Lb,lt,si={}, {},0,1
 
@@ -62,6 +61,31 @@ local NFH=false
 local function gC() local c=LP.Character if not c or not c:FindFirstChild("HumanoidRootPart")then return nil end local hrp=c.HumanoidRootPart local cl,d=nil,math.huge for _,pl in ipairs(P:GetPlayers())do if pl~=LP and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart")then local dis=(pl.Character.HumanoidRootPart.Position-hrp.Position).Magnitude if dis<d then cl=pl d=dis end end end return cl end
 
 T2:CreateToggle({Name="Instant heal",CurrentValue=false,Flag="NFH",Callback=function(v)NFH=v task.spawn(function() while NFH do local t=gC() if t and t.Character then pcall(function() HEvent:FireServer("success",1,t.Character)end) end task.wait(0.1)end end)end})
+local CH=false
+local SG=Instance.new("ScreenGui")
+SG.Parent=game:GetService("CoreGui")
+
+local CR=Instance.new("Frame")
+CR.Size=UDim2.new(0,6,0,6)
+CR.AnchorPoint=Vector2.new(0.5,0.5)
+CR.Position=UDim2.new(0.5,0,0.4,0)
+CR.BackgroundColor3=Color3.new(1,1,1)
+CR.BorderSizePixel=0
+CR.Visible=false
+local C=Instance.new("UICorner")
+C.CornerRadius=UDim.new(1,0)
+C.Parent=CR
+CR.Parent=SG
+
+T2:CreateToggle({
+Name="Crosshair(dk why i made this)",
+CurrentValue=false,
+Flag="CROSSHAIR",
+Callback=function(v)
+CH=v
+CR.Visible=v
+end
+})
 
 T2:CreateButton({Name="Escape without opening gate(u still get the point)",Callback=function()
 local M=W:FindFirstChild("Map")
@@ -70,6 +94,7 @@ local H=LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")
 if not H then return end
 for _,d in ipairs(M:GetDescendants())do if d:IsA("TouchTransmitter") or d.Name=="TouchInterest"then local p=d.Parent if p and p:IsA("BasePart")then pcall(function() firetouchinterest(H,p,0) task.wait(0.02) firetouchinterest(H,p,1) end) end end end
 end})
+
 
 T3:CreateParagraph({Title="Info(need to use the masked killer)",Content="Use buttons below to pick which mask u want to use"})
 T3:CreateParagraph({
@@ -87,81 +112,10 @@ local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForC
 for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
 
 
-local CH={
-Enabled=false,
-Type="Normal",
-NormalID=311756276,
-MLGID=2159978195
-}
 
-local SG=Instance.new("ScreenGui")
-SG.Name="CrosshairGUI"
-SG.IgnoreGuiInset=true
-SG.ResetOnSpawn=false
-SG.DisplayOrder=0
-SG.Parent=game:GetService("CoreGui")
-
-local CR
-
-local function UC()
-if CR then 
-CR:Destroy()
-CR=nil
-end
-
-if not CH.Enabled then return end
-
-local id=CH.Type=="Normal"and CH.NormalID or CH.MLGID
-
-local s,r=pcall(function()
-return game:GetObjects("rbxassetid://"..id)[1]
-end)
-
-if s and r then
-CR=r
-CR.Parent=SG
-
-if CR:IsA("ImageLabel")or CR:IsA("Frame")then
-CR.AnchorPoint=Vector2.new(0.5,0.5)
-CR.Position=UDim2.new(0.5,0,0.5,0)
-CR.BackgroundTransparency=1
-CR.Size=UDim2.new(0,50,0,50)
-CR.Active=false
-CR.Selectable=false
-CR.ClipsDescendants=false
-end
-end
-end
-
-T4:CreateToggle({
-Name="Use crosshair",
-CurrentValue=CH.Enabled,
-Flag="CROSSHAIR",
-Callback=function(v)
-CH.Enabled=v
-UC()
-end
-})
-
-T4:CreateDropdown({
-Name="Crosshair type(more in the future)",
-Options={"Normal","MLG"},
-CurrentOption=CH.Type,
-Flag="CH_TYPE",
-Callback=function(v)
-CH.Type=v
-if CH.Enabled then
-UC()
-end
-end
-})
-
-UC()
-
-
-T5:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
-T5:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
-T5:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4}) end})
+T4:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
+T4:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
+T4:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4}) end})
 
 local function clr() for _,h in pairs(H)do h:Destroy() end for _,l in pairs(Lb)do l:Destroy() end H,Lb={} end
 P.PlayerRemoving:Connect(function(pl) if pl==LP then clr() end end)
