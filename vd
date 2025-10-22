@@ -16,7 +16,8 @@ local WN=L:CreateWindow({Name="violence district",LoadingTitle="Loading peak scr
 local T1=WN:CreateTab("ESP",4483362458)
 local T2=WN:CreateTab("Misc",4483362458)
 local T3=WN:CreateTab("Power",4483362458)
-local T4=WN:CreateTab("Info",4483362458)
+local T4=WN:CreateTab("Crosshair",4483362458)
+local T5=WN:CreateTab("Info",4483362458)
 local kE,sE,hE,gE,eE=false,false,false,false,false
 local H,Lb,lt,si={}, {},0,1
 
@@ -86,10 +87,82 @@ local function uM(n) RS:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForC
 for _,m in ipairs({"Alex","Tony","Brandon","Jake","Richter","Graham","Richard"})do T3:CreateButton({Name=m,Callback=function() uM(m) end}) end
 
 
-T4:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
-T4:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
-T4:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4}) end})
+local CH={
+Enabled=false,
+Type="Normal",
+NormalID=311756276,
+MLGID=2159978195
+}
+
+local SG=Instance.new("ScreenGui")
+SG.Name="CrosshairGUI"
+SG.IgnoreGuiInset=true
+SG.ResetOnSpawn=false
+SG.DisplayOrder=0
+SG.Parent=game:GetService("CoreGui")
+
+local CR
+
+local function UC()
+if CR then 
+CR:Destroy()
+CR=nil
+end
+
+if not CH.Enabled then return end
+
+local id=CH.Type=="Normal"and CH.NormalID or CH.MLGID
+
+local s,r=pcall(function()
+return game:GetObjects("rbxassetid://"..id)[1]
+end)
+
+if s and r then
+CR=r
+CR.Parent=SG
+
+if CR:IsA("ImageLabel")or CR:IsA("Frame")then
+CR.AnchorPoint=Vector2.new(0.5,0.5)
+CR.Position=UDim2.new(0.5,0,0.5,0)
+CR.BackgroundTransparency=1
+CR.Size=UDim2.new(0,50,0,50)
+CR.Active=false
+CR.Selectable=false
+CR.ClipsDescendants=false
+end
+end
+end
+
+T4:CreateToggle({
+Name="Use crosshair",
+CurrentValue=CH.Enabled,
+Flag="CROSSHAIR",
+Callback=function(v)
+CH.Enabled=v
+UC()
+end
+})
+
+T4:CreateDropdown({
+Name="Crosshair type(more in the future)",
+Options={"Normal","MLG"},
+CurrentOption=CH.Type,
+Flag="CH_TYPE",
+Callback=function(v)
+CH.Type=v
+if CH.Enabled then
+UC()
+end
+end
+})
+
+UC()
+
+
+T5:CreateParagraph({Title="by pall(@opalbetus)",Content="on YouTube"})
+T5:CreateParagraph({Title="sorry yall if something is missing",Content="cuz i dont know what to add"})
+T5:CreateButton({Name="copy discord invite",Callback=function() setclipboard("https://discord.gg/TbK2NWqS5R") L:Notify({Title="join now",Content="discord link copied to clipboard",Duration=4}) end})
 
 local function clr() for _,h in pairs(H)do h:Destroy() end for _,l in pairs(Lb)do l:Destroy() end H,Lb={} end
 P.PlayerRemoving:Connect(function(pl) if pl==LP then clr() end end)
-L:LoadConfiguration()
+L:LoadConfiguration() 
