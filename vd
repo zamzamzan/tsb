@@ -78,7 +78,7 @@ C.Parent=CR
 CR.Parent=SG
 
 T2:CreateToggle({
-Name="Crosshair(dk why i made this)",
+Name="Unlock crosshair(dk why i made this)",
 CurrentValue=false,
 Flag="CROSSHAIR",
 Callback=function(v)
