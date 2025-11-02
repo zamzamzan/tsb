@@ -126,6 +126,44 @@ mL(t, string.format("%s\n%.0f studs", n, d), c)
 end
 end
 
+local PESP = false
+
+T1:CreateToggle({
+Name = "Pumpkin ESP",
+CurrentValue = false,
+Flag = "PESP",
+Callback = function(v)
+PESP = v
+if not v then
+for m, _ in pairs(H) do
+if m:IsA("Model") and m.Name:lower():find("pumpkin") then
+rH(m)
+end
+end
+end
+end
+})
+
+task.spawn(function()
+while task.wait(0.5) do
+if not PESP then continue end
+local Map = workspace:FindFirstChild("Map")
+if Map then
+local Pumpkins = Map:FindFirstChild("Pumpkins")
+if Pumpkins then
+for _, o in ipairs(Pumpkins:GetDescendants()) do
+if o:IsA("Model") and o.Name:lower():find("pumpkin") then
+mH(o, Color3.fromRGB(255, 128, 0))
+end
+if o:IsA("BasePart") and o.Name:lower():find("shell") then
+mH(o.Parent, Color3.fromRGB(255, 128, 0))
+end
+end
+end
+end
+end
+end)
+
 T1:CreateToggle({
 Name = "Killer ESP",
 CurrentValue = false,
