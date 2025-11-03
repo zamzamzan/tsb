@@ -1,6 +1,7 @@
---hi skid
+--hi skid pls give me credit if u wanna skid thank you
 
 --MADE WITH CHATGTP DEEPSEEK GEMINI GROK CLAUDE PERPLEXY SUNO UDIO
+--// ignore ts
 
 workspace.DescendantAdded:Connect(function(o)
 if o.Name:lower():find("antifling") then
